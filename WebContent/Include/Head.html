@@ -1,0 +1,99 @@
+<div class="container-fluid">
+    
+    <div class="bg-light">
+		<nav class="navbar navbar-expand-md navbar-dark border-3 border-bottom border-primary" style="background-color: #4b63e9;">
+            <div class="container-fluid">
+                <a href="index.jsp" class="navbar-brand">Liga Futbol</a>
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#MenuNavegacion">
+                        <span class="navbar-toggler-icon"></span>
+                </button>
+
+			<div id="MenuNavegacion" class="collapse navbar-collapse">
+				<ul class="navbar-nav ms-3">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown">
+                          Equipo
+                        </a>
+                        <ul class="dropdown-menu w-500">
+                        	<form action="EquipoServlet" method=get>
+                          <li><button class="btn btn-sm btn-light" type="submit" name="accion" value="Administrar">Modificar o Eliminar Equipo</button></li>
+                          </form>
+                        </ul>
+                        
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown">
+                          Partido
+                        </a>
+                        <ul class="dropdown-menu">
+                         	<form action="PartidoControl" method=post>
+                          <li><button class="btn btn-sm btn-light w-100" type="submit" name="accion" value="add">Cargar Partido</button></li>
+                          <li><button class="btn btn-sm btn-light" type="submit" name="accion" value="modif">Modificar o Eliminar Partidos</button></li>
+                          <li><button class="btn btn-sm btn-light w-100" type="submit" name="accion" value="listarP">Mostrar Partidos</button></li>
+                          </form>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown">
+                          Jugador
+                        </a>
+                        <ul class="dropdown-menu">
+                         	<form action="JugadorControl" method=post>
+                          <li><button class="btn btn-sm btn-light w-100" type="submit" name="accion" value="add">Cargar Jugador</button></li>
+                          <li><button class="btn btn-sm btn-light" type="submit" name="accion" value="modif">Modificar o Eliminar Jugadores</button></li>
+                          <li><button class="btn btn-sm btn-light w-100" type="submit" name="accion" value="listarJ">Mostrar Jugadores</button></li>
+                          </form>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown">
+                          Entrenador
+                        </a>
+                        <ul class="dropdown-menu">
+                         	<form action="EntrenadorControl" method=post>
+                          <li><button class="btn btn-sm btn-light w-100" type="submit" name="accion" value="add">Cargar Entrenador</button></li>
+                          <li><button class="btn btn-sm btn-light" type="submit" name="accion" value="modif">Modificar o Eliminar Entrenadores</button></li>
+                          <li><button class="btn btn-sm btn-light w-100" type="submit" name="accion" value="listar">Mostrar Entrenadores</button></li>
+                          </form>
+                        </ul>
+                    </li> 
+                     <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown">
+                          Arbitro
+                        </a>
+                        <ul class="dropdown-menu">
+                         	<form action="ArbitroControl" method=post>
+                          <li><button class="btn btn-sm btn-light w-100" type="submit" name="accion" value="add">Cargar Arbitro</button></li>
+                          <li><button class="btn btn-sm btn-light" type="submit" name="accion" value="modif">Modificar o Eliminar Arbitro</button></li>
+                          <li><button class="btn btn-sm btn-light w-100" type="submit" name="accion" value="listar">Mostrar Arbitro</button></li>
+                          </form>
+                        </ul>
+                    </li> 
+                     <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown">
+                          Cancha
+                        </a>
+                        <ul class="dropdown-menu">
+                         	<form action="CanchaControl" method=post>
+                          <li><button class="btn btn-sm btn-light w-100" type="submit" name="accion" value="add">Cargar Cancha</button></li>
+                          <li><button class="btn btn-sm btn-light" type="submit" name="accion" value="modif">Modificar o Eliminar Cancha</button></li>
+                          <li><button class="btn btn-sm btn-light w-100" type="submit" name="accion" value="listar">Mostrar Cancha</button></li>
+                          </form>
+                        </ul>
+                    </li>        
+                       <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown">
+                          Caso de uso
+                        </a>
+                        <ul class="dropdown-menu">
+                        <form action="CUControl" method=post>
+                           <li><button class="btn btn-sm btn-light w-100" type="submit" name="accion" value="ReprogramarPartido">Reprogramar</button></li>
+                            <li><button class="btn btn-sm btn-light w-100" type="submit" name="accion" value="AsignarArbitro">AsignarArbitro</button></li>
+                           </form>
+                        </ul>
+                    </li> 
+				</ul>
+			</div>
+		</nav>
+	</div>
+</div>
