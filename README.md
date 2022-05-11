@@ -18,14 +18,14 @@ Regularidad
 | ABMC Dependiente | Equipo - Partido                    |
 | CU               | Asignar árbitro - Registrar Partido |
 | Listado Complejo | Filtro por posicion de jugador      |
-| Nivel de acceso  | Usuario - Administrador             |
+| Nivel de acceso  |  Administrador                      |
 
 
 Aprobación directa
 
 | REQUERIMIENTO    | Listado de casos incluidos             |
 | -------------    | -----------------------------------    |
-| ABMC Todos       | Jugador - DT - Árbitro - Cancha        |
+| ABMC Todos       | Jugador - DT - Árbitro - Cancha - Equipo - partido -...   |
 | CU  Complejo     | Reprogramación Fecha - Generar Fixture |
 | Listado Complejo | Filtro por posicion de jugador - Listar Máximos asistentes, goleadores - Jugadores sancionados        |
 | Nivel de acceso  | Usuario - Administrador                |
