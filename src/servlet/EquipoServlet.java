@@ -13,8 +13,6 @@ import entities.Entrenador;
 import entities.Equipo;
 import logic.EntrenadorLogic;
 import logic.EquipoLogic;
-import logic.JugadorLogic;
-
 
 /**
  * Servlet implementation class SrvEquipo
@@ -40,8 +38,8 @@ public class EquipoServlet extends HttpServlet {
 			catch(Exception e)
 			{
 				e.printStackTrace();
-				request.setAttribute("msg", "Ocurrio un error al buscar al Equipo, vuelva a intentarlo.");
-				request.getRequestDispatcher("Equipo-Add.jsp").forward(request, response);
+				request.setAttribute("msg", "Ocurrio un error, vuelva a intentarlo.");
+				request.getRequestDispatcher(administrar).forward(request, response);
 			}	
 			break;
 		case "Administrar": // muestro lista de equipos para seleccionar si quiero editar/eliminar/agregar algunos cambiar nombre de modif por otro mejor
@@ -53,7 +51,7 @@ public class EquipoServlet extends HttpServlet {
 			{
 				e.printStackTrace();
 				request.setAttribute("msg", "Ocurrio un error al buscar la lista de Equipos, vuelva a intentarlo.");
-				request.getRequestDispatcher("Equipo-Add.jsp").forward(request, response);
+				request.getRequestDispatcher("index.jsp").forward(request, response);
 			}	
 			break;
 		case "formEdit": // preparo el equipo a editar y muestro la pagina jsp con sus datos
@@ -65,7 +63,7 @@ public class EquipoServlet extends HttpServlet {
 			{
 				e.printStackTrace();
 				request.setAttribute("msg", "Ocurrio un error al buscar el Equipo seleccionado, vuelva a intentarlo.");
-				request.getRequestDispatcher("Equipo-Add.jsp").forward(request, response);
+				request.getRequestDispatcher(administrar).forward(request, response);
 			}	
 			break;	
 		default: // falta agregar mensaje de error
@@ -84,7 +82,7 @@ public class EquipoServlet extends HttpServlet {
 			{
 				e.printStackTrace();
 				request.setAttribute("msg", "Ocurrio un error, no se pudo agregar al equipo, vuelva a intentarlo");
-				request.getRequestDispatcher("Equipo-Add.jsp").forward(request, response);
+				request.getRequestDispatcher(administrar).forward(request, response);
 			}	
 			break;
 		case "update": // realizo el update
@@ -105,11 +103,12 @@ public class EquipoServlet extends HttpServlet {
 			{
 				eliminarEquipo(request,response);
 			}
-			catch(Exception e )
+			catch(SQLException e )
 			{
 				e.printStackTrace();
-				request.setAttribute("msg", "Ocurrio un error, no se pudo eliminar el equipo, vuelva a intentarlo.");
-				request.getRequestDispatcher("Equipo-Add.jsp").forward(request, response);			
+				request.setAttribute("msg", "Ocurrio un error o el equipo todavia tiene partidos por jugar, vuelva a intentarlo.");
+				System.out.println("Ocurrio un error o el equipo todavia tiene partidos por jugar, vuelva a intentarlo.");
+				listEquipos(request, response);			
 			}	
 			break;
 		default: // falta agregar mensaje de error
@@ -159,12 +158,8 @@ private void updateEquipo(HttpServletRequest request, HttpServletResponse respon
 private void eliminarEquipo(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException { //falta verificar que el equipo no este por jugar un partido antes de ser borradom en dicho caso cancelar la aliminacion hasta que juegue todos sus partidos
 	Equipo equipo = new Equipo();
 	EquipoLogic equipoL=new EquipoLogic();
-	EntrenadorLogic entrenadorL= new EntrenadorLogic();
-	JugadorLogic jugadorL=new JugadorLogic();
 	equipo.setIdEquipo(Integer.parseInt(request.getParameter("idEquipo")));	
-	equipoL.delete(equipo);	 // una vez borradas las dependencias borro el equipo
-	entrenadorL.deleteDependency(equipo); // si existe un entrenador perteneciente al equipo borrar dependencia
-	jugadorL.deleteDependency(equipo); //si existen jugadores pertenecientes al equipo borrar dependencia	
+	equipoL.delete(equipo);	 // una vez borradas las dependencias borro el equipo si no tiene partidos sin jugar
 	listEquipos(request, response);
 }
 private void preparaEquipoEdit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

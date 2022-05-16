@@ -14,7 +14,7 @@ import entities.Equipo;
 public class DataEntrenador {
 
 		public LinkedList<Entrenador> getAll(){	
-			Conexion conexion = new Conexion();
+			DbConnector conexion = new DbConnector();
 			Connection cn = null;
 			Statement stm = null;
 			ResultSet rs = null;
@@ -60,7 +60,7 @@ public class DataEntrenador {
 			return entrenadores;
 		}
 		public Entrenador getOne(Entrenador e) {
-			Conexion conexion = new Conexion();
+			DbConnector conexion = new DbConnector();
 			Connection cn = null;
 			PreparedStatement ps=null;
 			ResultSet rs=null;
@@ -106,7 +106,7 @@ public class DataEntrenador {
 		return entrenador;
 			}
 		public void add (Entrenador e) {	   
-				Conexion conexion = new Conexion();
+				DbConnector conexion = new DbConnector();
 				Connection cn = null;
 	    		PreparedStatement ps=null;
 		        try {
@@ -134,7 +134,7 @@ public class DataEntrenador {
 				}
 			}	
 		public void delete(Entrenador e) {
-				Conexion conexion = new Conexion();
+				DbConnector conexion = new DbConnector();
 				Connection cn = null;
 				PreparedStatement ps=null;
 			    try {
@@ -159,7 +159,7 @@ public class DataEntrenador {
 				}	
 		}
 		public void update (Entrenador e) {		   
-			Conexion conexion = new Conexion();
+			DbConnector conexion = new DbConnector();
 			Connection cn = null;
 			PreparedStatement ps=null;
 		    try {
@@ -187,35 +187,8 @@ public class DataEntrenador {
 				}
 			}	
 		}
-		public void deleteDependency(Equipo equipo)
-		{
-			Conexion conexion = new Conexion();
-			Connection cn = null;
-			PreparedStatement ps=null;
-		    try {
-		    	cn = conexion.conectar();
-				ps=cn.prepareStatement("update entrenador ent inner join equipo eq on eq.id=ent.idEquipo set ent.idEquipo=null where ent.idEquipo=? and eq.fecha_baja is not null"
-						+ "");
-				ps.setInt(1, equipo.getIdEquipo());
-		        ps.executeUpdate();   
-		    } catch (SQLException ex) {
-		        ex.printStackTrace();
-		    }
-		    finally {
-				try {
-					if (ps!= null) {
-						ps.close();
-					}					
-					if (cn != null) {
-						cn.close();
-					}
-				} catch (Exception e2) {
-					e2.printStackTrace();
-				}
-			}		
-		}
 		public LinkedList<Entrenador> getEntrenadoresDisp() // lista de entrenadores sin equipo
-		{	Conexion conexion = new Conexion();
+		{	DbConnector conexion = new DbConnector();
 		Connection cn = null;
 		Statement stm = null;
 		ResultSet rs = null;
@@ -252,4 +225,31 @@ public class DataEntrenador {
 		}
 		return entrenadores;	
 		}
+		/*	public void deleteDependency(Equipo equipo)
+		{
+			Conexion conexion = new Conexion();
+			Connection cn = null;
+			PreparedStatement ps=null;
+		    try {
+		    	cn = conexion.conectar();
+				ps=cn.prepareStatement("update entrenador ent inner join equipo eq on eq.id=ent.idEquipo set ent.idEquipo=null where ent.idEquipo=? and eq.fecha_baja is not null"
+						+ "");
+				ps.setInt(1, equipo.getIdEquipo());
+		        ps.executeUpdate();   
+		    } catch (SQLException ex) {
+		        ex.printStackTrace();
+		    }
+		    finally {
+				try {
+					if (ps!= null) {
+						ps.close();
+					}					
+					if (cn != null) {
+						cn.close();
+					}
+				} catch (Exception e2) {
+					e2.printStackTrace();
+				}
+			}		
+		}*/
 		}

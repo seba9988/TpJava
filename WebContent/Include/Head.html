@@ -16,7 +16,7 @@
                         </a>
                         <ul class="dropdown-menu w-500">
                         	<form action="EquipoServlet" method=get>
-                          <li><button class="btn btn-sm btn-light" type="submit" name="accion" value="Administrar">Modificar o Eliminar Equipo</button></li>
+                          <li><button class="btn btn-sm btn-light" type="submit" name="accion" value="Administrar">Administrar Equipos</button></li>
                           </form>
                         </ul>
                         
@@ -38,10 +38,8 @@
                           Jugador
                         </a>
                         <ul class="dropdown-menu">
-                         	<form action="JugadorControl" method=post>
-                          <li><button class="btn btn-sm btn-light w-100" type="submit" name="accion" value="add">Cargar Jugador</button></li>
-                          <li><button class="btn btn-sm btn-light" type="submit" name="accion" value="modif">Modificar o Eliminar Jugadores</button></li>
-                          <li><button class="btn btn-sm btn-light w-100" type="submit" name="accion" value="listarJ">Mostrar Jugadores</button></li>
+                         	<form action="JugadorServlet" method=get>
+                          <li><button class="btn btn-sm btn-light" type="submit" name="accion" value="administrar">Administrar Jugadores</button></li>
                           </form>
                         </ul>
                     </li>

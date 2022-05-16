@@ -29,8 +29,7 @@
         </tr>
         <%
         LinkedList<Cancha>list=(LinkedList<Cancha>)session.getAttribute("listaC");
-		for(Cancha listC : list) {
-			
+		for(Cancha listC : list) {		
         %>
         <tr>
             <th><%=listC.getNombre() %></th>

@@ -11,7 +11,7 @@ import entities.Cancha;
 
 public class DataCancha {
 		public LinkedList<Cancha> getAll(){	
-			Conexion conexion = new Conexion();
+			DbConnector conexion = new DbConnector();
 			Connection cn = null;
 			Statement stm = null;
 			ResultSet rs = null;
@@ -48,7 +48,7 @@ public class DataCancha {
 			return canchas;
 		}
 		public Cancha getOne(Cancha c) {
-			Conexion conexion = new Conexion();
+			DbConnector conexion = new DbConnector();
 			Connection cn = null;
 			PreparedStatement ps=null;
 			Cancha cancha = new Cancha();
@@ -81,7 +81,7 @@ public class DataCancha {
 		return c;
 			}
 		public void add (Cancha c) {  
-				Conexion conexion = new Conexion();
+				DbConnector conexion = new DbConnector();
 				Connection cn = null;
 	    		PreparedStatement ps=null;
 		        try {
@@ -107,7 +107,7 @@ public class DataCancha {
 				}
 			}		
 		public void delete(Cancha c) {
-				Conexion conexion = new Conexion();
+				DbConnector conexion = new DbConnector();
 				Connection cn = null;
 		    	PreparedStatement ps=null;
 			    try {
@@ -132,7 +132,7 @@ public class DataCancha {
 				}
 		}
 		public void update (Cancha c) {		   
-			Conexion conexion = new Conexion();
+			DbConnector conexion = new DbConnector();
 			Connection cn = null;
 			PreparedStatement ps=null;
 		    try {

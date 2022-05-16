@@ -3,7 +3,6 @@ import java.util.LinkedList;
 
 import data.DataEntrenador;
 import entities.Entrenador;
-import entities.Equipo;
 
 public class EntrenadorLogic {
 	private DataEntrenador dEntrenador;
@@ -32,14 +31,14 @@ public class EntrenadorLogic {
 	{
 		dEntrenador.update(e);
 	}
-	public void deleteDependency(Equipo equipo)          
-	{
-		dEntrenador.deleteDependency(equipo);
-	}
 	public LinkedList<Entrenador> getEntrenadoresDisp()
 	{
 		return dEntrenador.getEntrenadoresDisp();
 	}
+	/*public void deleteDependency(Equipo equipo)          
+	{
+		dEntrenador.deleteDependency(equipo);
+	}*/
 
 	
 

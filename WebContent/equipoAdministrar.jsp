@@ -23,6 +23,7 @@
     <form action="EquipoServlet" method=get>
     	<button type="submit" class="btn btn-primary" name="accion" value="formAdd">Agregar</button>
     </form>
+    <span style="color: red;"><%request.getAttribute("msg");%></span>
     
 <div class="container-fluid">
     <br>

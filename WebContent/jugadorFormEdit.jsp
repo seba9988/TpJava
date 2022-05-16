@@ -1,8 +1,7 @@
 
 <%@ page language="java" import="java.util.*,java.sql.*"
-	import="Data.DataJugador"
 	import="java.util.LinkedList"
-	import="Entidades.Jugador"
+	import="entities.Jugador"
 	import="java.util.Iterator"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,12 +21,11 @@
    
     <br>
 	<%	
-		Jugador J=(Jugador)session.getAttribute("jugador");
-		System.out.println(J);
+		Jugador J=(Jugador)request.getAttribute("jugador");
 	%>
     <div class="container border text-center">
       <p class="h1">Modificar Jugador</p>
-    <form action="JugadorControl" method=post>
+    <form action="JugadorServlet" method=post>
       	<div class="row mt-3">
           <div class="col-sm-8">
             <input type="hidden" name="dni" class="form-control" value="<%=J.getDni() %>"required>
@@ -89,7 +87,8 @@
           </div>
         <div class="row mt-3 mb-3">
           <div class="offset-sm-1 col-sm-10">
-            <button type="submit" class="btn btn-primary" name="accion" value="Actualizar"> Cargar</button>
+          	<input type="hidden" name="idEquipo" class="form-control" value="<%=J.getEquipo().getIdEquipo()%>">	
+            <button type="submit" class="btn btn-primary" name="accion" value="update"> Cargar</button>
           </div>
           
         </div>

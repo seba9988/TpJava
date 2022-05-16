@@ -2,15 +2,15 @@ package entities;
 
 
 public class Equipo {
-	private int idEquipo;
+	private Integer idEquipo;
 	private String nombre;
 	private String Localidad;
 	private int puntaje;
 	private int difGoles;
-	public int getIdEquipo() {
+	public Integer getIdEquipo() {
 		return idEquipo;
 	}
-	public void setIdEquipo(int idEquipo) {
+	public void setIdEquipo(Integer idEquipo) {
 		this.idEquipo = idEquipo;
 	}
 	public String getNombre() {

@@ -1,6 +1,6 @@
-<%@ page import="data.DataJugador"
+<%@ page 
 	import="java.util.LinkedList"
-	import="Entidades.Jugador"
+	import="entities.Jugador"
 	import="java.util.Iterator"%>
 
 <!DOCTYPE html>
@@ -20,7 +20,8 @@
 <%@ include file="/Include/Head.html" %>
     <br>
 
-.<div class="container-fluid">
+
+<div class="container-fluid">
     <br>
     <table id="tableEquipo" class="table table-bordered ">
         <tr>
@@ -34,12 +35,16 @@
             <th>Tarjetas Amarillas</th>
             <th>Tarjetas Rojas</th>
             <th>Partidos Jugados</th>
+            <th>Equipo</th>
             <th></th>
         </tr>
+        <form action="JugadorServlet" method=get>
+    	<button type="submit" class="btn btn-primary" name="accion" value="formAdd">Agregar</button>
+    </form>
+    <span style="color: red;"><%request.getAttribute("msg");%></span>
         <%
-       		LinkedList<Jugador>list= (LinkedList<Jugador>)session.getAttribute("lista");
-			for(Jugador listJ : list) {
-			
+       		LinkedList<Jugador>list= (LinkedList<Jugador>)request.getAttribute("listJugadores");
+			for(Jugador listJ : list) {		
         %>
         <tr>
         	<th><%=listJ.getDni()%></th>
@@ -52,23 +57,22 @@
             <th><%=listJ.getTarjetasA()%></th>
             <th><%=listJ.getTarjetasR()%></th>
             <th><%=listJ.getPartidosJugados()%></th>
-            <th><form action="JugadorControl" method=post>
+            <th><%=listJ.getEquipo().getNombre()%></th>
+            <th><form action="JugadorServlet" method=get>
             	<input type="hidden" name="dni" class="form-control" value="<%=listJ.getDni()%>">	
-            	<button type="submit" class="btn btn-primary" name="accion" value="editar">Editar</button>
-            	<button type="submit" class="btn btn-primary" name="accion" value="eliminar">Eliminar</button>
+            	<button type="submit" class="btn btn-primary" name="accion" value="formEdit">Editar</button>
+            	</form>
+            	<form action="JugadorServlet" method=post>
+            	<input type="hidden" name="dni" class="form-control" value="<%=listJ.getDni()%>">
+            	<button type="submit" class="btn btn-primary" name="accion" value="delete">Eliminar</button>
            		</form>
             </th>
         </tr> 
         <%}%>
     </table>
-   
 </div>
-
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
       crossorigin="anonymous"></script>
-
 </body>
-
 </html>

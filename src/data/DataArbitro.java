@@ -14,7 +14,7 @@ import entities.Arbitro;
 public class DataArbitro {
 
 	public LinkedList<Arbitro> getAll(){	
-		Conexion conexion = new Conexion();
+		DbConnector conexion = new DbConnector();
 		Connection cn = null;
 		Statement stm = null;
 		ResultSet rs = null;
@@ -51,7 +51,7 @@ public class DataArbitro {
 		return arbitros;
 	}
 	public Arbitro getOne(Arbitro a) {
-		Conexion conexion = new Conexion();
+		DbConnector conexion = new DbConnector();
 		Connection cn = null;
 		PreparedStatement ps=null;
 		Arbitro arbitro = new Arbitro();
@@ -84,7 +84,7 @@ public class DataArbitro {
 	return arbitro;
 		}
 	public void add (Arbitro a) {  
-			Conexion conexion = new Conexion();
+			DbConnector conexion = new DbConnector();
 			Connection cn = null;
     		PreparedStatement ps=null;
 	        try {
@@ -112,7 +112,7 @@ public class DataArbitro {
 			}
 		}		
 	public void delete(Arbitro a) {
-			Conexion conexion = new Conexion();
+			DbConnector conexion = new DbConnector();
 			Connection cn = null;
 			PreparedStatement ps=null;
 		    try {
@@ -125,7 +125,7 @@ public class DataArbitro {
 		    }	
 	}
 	public void update (Arbitro a) {		   
-		Conexion conexion = new Conexion();
+		DbConnector conexion = new DbConnector();
 		Connection cn = null;
 		PreparedStatement ps=null;
 	    try {

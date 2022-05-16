@@ -3,7 +3,6 @@ package logic;
 import java.util.LinkedList;
 
 import data.DataJugador;
-import entities.Equipo;
 import entities.Jugador;
 
 public class JugadorLogic {
@@ -15,6 +14,10 @@ public class JugadorLogic {
 	public LinkedList<Jugador> getAll()
 	{
 		return dJugador.getAll();
+	}
+	public LinkedList<Jugador> getAllByPosicion(Jugador j)
+	{
+		return dJugador.getAllByPosicion(j);
 	}
 	public Jugador getOne(Jugador j)
 	{
@@ -32,9 +35,9 @@ public class JugadorLogic {
 	{
 		dJugador.update(j);
 	}
-	public void deleteDependency(Equipo equipo)
+	/*public void deleteDependency(Equipo equipo)
 	{
 		dJugador.deleteDependency(equipo);
-	}
+	}*/
 
 }

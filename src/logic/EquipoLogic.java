@@ -1,5 +1,6 @@
 package logic;
 
+import java.sql.SQLException;
 import java.util.LinkedList;
 
 import data.DataEquipo;
@@ -23,7 +24,7 @@ public class EquipoLogic {
 	{
 		dEquipo.add(e);
 	}
-	public void delete(Equipo e)
+	public void delete(Equipo e) throws SQLException
 	{
 		dEquipo.delete(e);
 	}

@@ -1,6 +1,5 @@
 package data;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,14 +13,11 @@ import entities.*;
 public class DataPartido {
 	
 	public LinkedList<Partido> getAll () {
-		Conexion conexion = new Conexion();
-		Connection cn = null;
 		Statement stm = null;
 		ResultSet rs = null;
 		LinkedList<Partido> Partidos = new LinkedList<>();
 		try {
-			cn = conexion.conectar();
-			stm = cn.createStatement();
+			stm = DbConnector.getInstancia().getConn().createStatement();
 			rs = stm.executeQuery("SELECT p.fecha,p.hora,p.resultado,p.incidencias,"
 					+ "eq1.id,eq1.razonSocial,eq1.localidad,eq1.puntaje,eq1.difGoles,"
 					+ "eq2.id,eq2.razonSocial,eq2.localidad,eq2.puntaje,eq2.difGoles,"
@@ -58,17 +54,9 @@ public class DataPartido {
 			}catch(Exception ex) {ex.printStackTrace();}
 		finally {
 			try {
-				if (rs!= null) {
-					rs.close();
-				}
-				
-				if (stm != null) {
-					stm.close();
-				}
-				
-				if (cn != null) {
-					cn.close();
-				}
+				if (rs!= null) {rs.close();}
+				if (stm != null) {stm.close();}			
+				DbConnector.getInstancia().releaseConn();
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}
@@ -76,17 +64,14 @@ public class DataPartido {
 		return Partidos;
 	}
 	public Partido getOne(Partido p) // busca un partido con fecha, hora, nroCancha
-	{	Conexion conexion = new Conexion();
-		Connection cn = null;
-		PreparedStatement ps=null;
+	{	PreparedStatement ps=null;
 		ResultSet rs=null;
 		Partido partido = new Partido();
 		try {
 			Equipo equipo1=new Equipo();
 			Equipo equipo2=new Equipo();
 			Cancha cancha=new Cancha();
-			cn = conexion.conectar();
-			ps =cn.prepareStatement("SELECT p.fecha,p.hora,p.resultado,p.incidencias,"
+			ps =DbConnector.getInstancia().getConn().prepareStatement("SELECT p.fecha,p.hora,p.resultado,p.incidencias,"
 							+ "eq1.id,eq1.razonSocial,eq1.localidad,eq1.puntaje,eq1.difGoles,"
 							+ "eq2.id,eq2.razonSocial,eq2.localidad,eq2.puntaje,eq2.difGoles,"
 							+ "c.numCancha,c.nombre"
@@ -122,17 +107,9 @@ public class DataPartido {
 		    }
 		finally {
 			try {
-				if (ps!= null) {
-					ps.close();
-				}
-				
-				if (rs != null) {
-					rs.close();
-				}
-				
-				if (cn != null) {
-					cn.close();
-				}
+				if (ps!= null) {ps.close();}				
+				if (rs != null) {rs.close();}
+				DbConnector.getInstancia().releaseConn();
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}
@@ -140,13 +117,9 @@ public class DataPartido {
 		return partido;
 	}
 	public void update(Partido p) {
-		Conexion conexion = new Conexion();
-		Connection cn = null;
 		PreparedStatement ps= null;
-		System.out.println("Partido modif " + p);
 		try { 
-			cn = conexion.conectar();
-			ps = cn.prepareStatement("update partido set resultado = ?, idEquipo1 =?, idEquipo2=?, dniArbitro=? where  fecha=? and hora =? and numCancha= ?" );
+			ps =DbConnector.getInstancia().getConn().prepareStatement("update partido set resultado = ?, idEquipo1 =?, idEquipo2=?, dniArbitro=? where  fecha=? and hora =? and numCancha= ?" );
 			ps.setString(1, p.getResultado());
 			ps.setInt(2, p.getEquipo1().getIdEquipo());
 			ps.setInt(3, p.getEquipo2().getIdEquipo());
@@ -161,24 +134,17 @@ public class DataPartido {
 		}
 		finally {
 			try {
-				if (ps!= null) {
-					ps.close();
-				}				
-				if (cn != null) {
-					cn.close();
-				}
+				if (ps!= null) {ps.close();}	
+				DbConnector.getInstancia().releaseConn();				
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}
 		}
 	}
 	public void add (Partido p) {	   
-		Conexion conexion = new Conexion();
-		Connection cn = null;
    		PreparedStatement ps=null;
         try {
-        	cn = conexion.conectar();
-    		ps=cn.prepareStatement("insert into partido(fecha,hora,idEquipo1,idEquipo2,numCancha,resultado) values (?,?,?,?,?,?)"); // no pongo incidencias ni resultado porque es un partido nuevo
+    		ps=DbConnector.getInstancia().getConn().prepareStatement("insert into partido(fecha,hora,idEquipo1,idEquipo2,numCancha,resultado) values (?,?,?,?,?,?)"); // no pongo incidencias ni resultado porque es un partido nuevo
     		ps.setObject(1, p.getFecha());
     		ps.setObject(2, p.getHora());
 			ps.setInt(3, p.getEquipo1().getIdEquipo());
@@ -192,24 +158,17 @@ public class DataPartido {
         }
         finally {
 			try {
-				if (ps!= null) {
-					ps.close();
-				}				
-				if (cn != null) {
-					cn.close();
-				}
+				if (ps!= null) {ps.close();}		
+				DbConnector.getInstancia().releaseConn();
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}
 		}
 	}
 	public void delete(Partido p) {
-		Conexion conexion = new Conexion();
-		Connection cn = null;
 		PreparedStatement ps=null;
-	    try {
-	    	cn = conexion.conectar();
-	    	ps = cn.prepareStatement("delete from partido where fecha=? and hora=? and numCancha=?");
+	    try {	    	
+	    	ps = DbConnector.getInstancia().getConn().prepareStatement("delete from partido where fecha=? and hora=? and numCancha=?");
 			ps.setObject(1, p.getFecha());
 			ps.setObject(2, p.getHora());
 			ps.setInt(3, p.getCancha().getNroCancha());		
@@ -219,12 +178,8 @@ public class DataPartido {
 	    }
 	    finally {
 			try {
-				if (ps!= null) {
-					ps.close();
-				}				
-				if (cn != null) {
-					cn.close();
-				}
+				if (ps!= null) {ps.close();}	
+				DbConnector.getInstancia().releaseConn();
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}

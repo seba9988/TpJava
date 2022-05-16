@@ -21,11 +21,7 @@
 
     <div class="container border text-center">
       <p class="h1">Cargar Datos del Jugador</p>
-     
-      <p> <% 
-      
-      %></p>
-      <form action="JugadorControl" method=post>
+      <form action="JugadorServlet" method=post>
       	<div class="row mt-3">
           <label for="dni" class="col-form-label col-sm-2">Dni Jugador: </label>
           <div class="col-sm-8">
@@ -93,7 +89,7 @@
           </div>
         <div class="row mt-3 mb-3">
           <div class="offset-sm-1 col-sm-10">
-            <button type="submit" class="btn btn-primary" name="accion" value="agregar"> Cargar</button>
+            <button type="submit" class="btn btn-primary" name="accion" value="add"> Cargar</button>
           </div>
           
         </div>
