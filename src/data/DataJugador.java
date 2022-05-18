@@ -13,17 +13,15 @@ import entities.Jugador;
 public class DataJugador {
 	
 	public LinkedList<Jugador> getAll(){	
-		Statement stm = null;
-		ResultSet rs = null;
+		String getAllStatement="Select jug.dniJugador,jug.nombre,jug.apellido,jug.fechaNac,jug.posicion,jug.goles,jug.asistencias,jug.amarillas,jug.rojas,jug.partJugados"
+				+ ",eq.id,eq.razonSocial,eq.localidad,eq.puntaje,eq.difGoles "
+				+ "from jugador jug left join equipo eq on jug.idEquipo=eq.id";
+		Jugador jugador=new Jugador();
+		Equipo equipo= new Equipo();
 		LinkedList<Jugador> jugadores= new LinkedList<>();	
-		try {
-			stm = DbConnector.getInstancia().getConn().createStatement();
-			rs = stm.executeQuery("Select jug.dniJugador,jug.nombre,jug.apellido,jug.fechaNac,jug.posicion,jug.goles,jug.asistencias,jug.amarillas,jug.rojas,jug.partJugados"
-					+ ",eq.id,eq.razonSocial,eq.localidad,eq.puntaje,eq.difGoles "
-					+ "from jugador jug left join equipo eq on jug.idEquipo=eq.id"); // falta buscar escudo		
-			while (rs.next()) { // jugadores con equipo
-				Jugador jugador=new Jugador();
-				Equipo equipo= new Equipo();
+		try (Statement stm = DbConnector.getInstancia().getConn().createStatement();
+			ResultSet rs = stm .executeQuery(getAllStatement);){			 
+			while (rs.next()) { // jugadores con equipo				
 				jugador.setDni(rs.getString("jug.dniJugador"));
 				jugador.setNombre(rs.getString("jug.nombre"));
 				jugador.setApellido(rs.getString("jug.apellido"));
@@ -47,9 +45,7 @@ public class DataJugador {
 		} catch (SQLException e) {
 			e.printStackTrace();		
 		} finally {
-			try {
-				if (rs!= null) {rs.close();}
-				if (stm != null) {stm.close();}	
+			try {				
 				DbConnector.getInstancia().releaseConn();
 			} catch (Exception e2) {
 				e2.printStackTrace();
@@ -58,18 +54,17 @@ public class DataJugador {
 		return jugadores;
 	}
 	public LinkedList<Jugador> getAllByPosicion(Jugador j){	
-		PreparedStatement ps= null;
-		ResultSet rs = null;
+		String getAllByPosicionStmt="Select jug.dniJugador,jug.nombre,jug.apellido,jug.fechaNac,jug.posicion,jug.goles,jug.asistencias,jug.amarillas,jug.rojas,jug.partJugados"
+				+ ",eq.id,eq.razonSocial,eq.localidad,eq.puntaje,eq.difGoles "
+				+ "from jugador jug left join equipo eq on jug.idEquipo=eq.id where jug.posicion=?";
+		Jugador jugador=new Jugador();
+		Equipo equipo= new Equipo();
 		LinkedList<Jugador> jugadores= new LinkedList<>();	
-		try {
-			ps =DbConnector.getInstancia().getConn().prepareStatement("Select jug.dniJugador,jug.nombre,jug.apellido,jug.fechaNac,jug.posicion,jug.goles,jug.asistencias,jug.amarillas,jug.rojas,jug.partJugados"
-					+ ",eq.id,eq.razonSocial,eq.localidad,eq.puntaje,eq.difGoles "
-					+ "from jugador jug left join equipo eq on jug.idEquipo=eq.id where jug.posicion=?"); // falta buscar escudo	
+		try(PreparedStatement ps= DbConnector.getInstancia().getConn().prepareStatement(getAllByPosicionStmt);) {
 			ps.setString(1, j.getPosicion());
-			rs=ps.executeQuery();
-			while (rs.next()) {
-				Jugador jugador=new Jugador();
-				Equipo equipo= new Equipo();
+			
+			try(ResultSet rs =ps.executeQuery();){
+			while (rs.next()) {				
 				jugador.setDni(rs.getString("jug.dniJugador"));
 				jugador.setNombre(rs.getString("jug.nombre"));
 				jugador.setApellido(rs.getString("jug.apellido"));
@@ -89,12 +84,12 @@ public class DataJugador {
 				}
 				jugador.setEquipo(equipo);
 				jugadores.add(jugador);						
-			}			
+			}	
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();		
 		} finally {
 			try {
-				if (rs!= null) {rs.close();}	
 				DbConnector.getInstancia().releaseConn();
 			} catch (Exception e2) {
 				e2.printStackTrace();
@@ -103,17 +98,15 @@ public class DataJugador {
 		return jugadores;
 	}
 	public Jugador getOne(Jugador j) {
-
-		PreparedStatement ps=null;
-		ResultSet rs=null;
+		String getOneStatement="Select jug.dniJugador,jug.nombre,jug.apellido,jug.fechaNac,jug.posicion,jug.goles,jug.asistencias,jug.amarillas,jug.rojas,jug.partJugados"
+				+ ",eq.id,eq.razonSocial,eq.localidad,eq.puntaje,eq.difGoles "
+				+ "from jugador jug left join equipo eq on jug.idEquipo=eq.id where jug.dniJugador=?";
 		Jugador jugador = new Jugador();
 		Equipo equipo= new Equipo();
-	    try {
-			ps =DbConnector.getInstancia().getConn().prepareStatement("Select jug.dniJugador,jug.nombre,jug.apellido,jug.fechaNac,jug.posicion,jug.goles,jug.asistencias,jug.amarillas,jug.rojas,jug.partJugados"
-							+ ",eq.id,eq.razonSocial,eq.localidad,eq.puntaje,eq.difGoles "
-							+ "from jugador jug left join equipo eq on jug.idEquipo=eq.id where jug.dniJugador=?");
+	    try(PreparedStatement ps=DbConnector.getInstancia().getConn().prepareStatement(getOneStatement);) {	
 			ps.setString(1, j.getDni());
-			rs=ps.executeQuery();  
+			
+			try(ResultSet rs=ps.executeQuery();){			
 	        while (rs.next()) {
 				jugador.setDni(rs.getString("jug.dniJugador"));
 				jugador.setNombre(rs.getString("jug.nombre"));
@@ -133,14 +126,13 @@ public class DataJugador {
 					equipo.setDifGoles(rs.getInt("eq.difGoles"));
 				}
 				jugador.setEquipo(equipo);	
-	        }		     
+	        }	
+			}
 	    } catch (SQLException ex) {
 	        ex.printStackTrace();
 	    }
 	    finally {
 			try {
-				if (rs!= null) {rs.close();}	
-				if (ps != null) {ps.close();}
 				DbConnector.getInstancia().releaseConn();
 			} catch (Exception e2) {
 				e2.printStackTrace();
@@ -149,9 +141,8 @@ public class DataJugador {
 	return jugador;
 		}
 	public void add (Jugador j) {
-    		PreparedStatement ps=null;
-	        try {
-	    		ps=DbConnector.getInstancia().getConn().prepareStatement("insert into jugador(dniJugador,nombre,apellido,fechaNac,posicion,goles,asistencias,amarillas,rojas,partJugados) values (?,?,?,?,?,?,?,?,?,?)");
+			String addStatement="insert into jugador(dniJugador,nombre,apellido,fechaNac,posicion,goles,asistencias,amarillas,rojas,partJugados) values (?,?,?,?,?,?,?,?,?,?)";
+	        try(PreparedStatement ps=DbConnector.getInstancia().getConn().prepareStatement(addStatement);) {
 	    		ps.setString(1, j.getDni());
 	    		ps.setString(2, j.getNombre());
 				ps.setString(3,j.getApellido());
@@ -168,17 +159,16 @@ public class DataJugador {
 	        }
 	        finally {
 				try {
-					if (ps!= null) {ps.close();}					
-
+					DbConnector.getInstancia().releaseConn();										
 				} catch (Exception e2) {
 					e2.printStackTrace();
 				}
 			}
 		}
 	public void delete(Jugador j) {
-			PreparedStatement ps=null;
-		    try {
-		    	ps = DbConnector.getInstancia().getConn().prepareStatement("delete from jugador where dniJugador=?");
+			String deleteStatement="delete from jugador where dniJugador=?";
+			
+		    try(PreparedStatement ps=DbConnector.getInstancia().getConn().prepareStatement(deleteStatement);) {
 				ps.setString(1, j.getDni());
 				ps.executeUpdate();  		
 		    } catch (SQLException ex) {
@@ -186,18 +176,16 @@ public class DataJugador {
 		    }		
 		    finally {
 				try {
-					if (ps!= null) {ps.close();}	
 					DbConnector.getInstancia().releaseConn();
 				} catch (Exception e2) {
 					e2.printStackTrace();
 				}
 			}	
 	}
-	public void update (Jugador j) {   
-		PreparedStatement ps=null;
-	    try {
-			ps=DbConnector.getInstancia().getConn().prepareStatement("update jugador jug set jug.nombre=?, jug.apellido=?, jug.fechaNac=?,jug.posicion=?,jug.goles=?,"
-					+ "jug.asistencias=?,jug.amarillas=?,jug.rojas=?,jug.partJugados=? where jug.dniJugador=?");
+	public void update (Jugador j) { 
+		String updateStatement="update jugador jug set jug.nombre=?, jug.apellido=?, jug.fechaNac=?,jug.posicion=?,jug.goles=?,"
+				+ "jug.asistencias=?,jug.amarillas=?,jug.rojas=?,jug.partJugados=? where jug.dniJugador=?";	
+	    try (PreparedStatement ps=DbConnector.getInstancia().getConn().prepareStatement(updateStatement);){
 			ps.setString(1, j.getNombre());
 			ps.setString(2,j.getApellido());
 			ps.setObject(3,j.getFecha_nacimiento());
@@ -214,7 +202,6 @@ public class DataJugador {
 	    }
 	    finally {
 			try {
-				if (ps!= null) {ps.close();}	
 				DbConnector.getInstancia().releaseConn();
 			} catch (Exception e2) {
 				e2.printStackTrace();
