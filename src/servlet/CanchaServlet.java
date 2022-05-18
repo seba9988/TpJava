@@ -1,124 +1,153 @@
 package servlet;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.LinkedList;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import data.DataCancha;
 import entities.Cancha;
+import logic.CanchaLogic;
 
 
 /**
  * Servlet implementation class CanchaControl
  */
-@WebServlet("/CanchaControl")
+@WebServlet("/CanchaServlet")
 public class CanchaServlet extends HttpServlet {
-
-	String listar = "Cancha-Listar.jsp";
-	String add="Cancha-Add.jsp";
-	String modif="Cancha-Modif.jsp";
-	String edit="Cancha-Edit.jsp";
-	Cancha c = new Cancha();
+	String showFormAdd="canchaFormAdd.jsp";
+	String administrar="canchaAdministrar.jsp";
+	String showFormEdit="canchaFormEdit.jsp";
 	
 	private static final long serialVersionUID = 1L;
        
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
     public CanchaServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		
 		String action=request.getParameter("accion");
-		if(action.equalsIgnoreCase("add")) {
-			response.sendRedirect(add);
-		}
-		
-		if(action.equalsIgnoreCase("agregar")) {
-			String numC=request.getParameter("NumC");
-			String nombre = request.getParameter("nombre");
-			
-			c.setNroCancha(Integer.parseInt(numC));
-			c.setNombre(nombre);
-			
-			if(DataCancha.add(c)) {
-				preparalist(request, response);
-				response.sendRedirect(listar);
-			} else {
-				request.setAttribute("msg", "No se pudo cargar Cancha Vuelva a intentarlo");
-				RequestDispatcher rd= request.getRequestDispatcher(add);
-				rd.forward(request, response);
+		switch(action) {
+		case "formAdd": // muestro jsp para rellenar datos del nuevo jugador
+			try
+			{	
+				request.getRequestDispatcher(showFormAdd).forward(request, response);	
 			}
-			
-		}
-		
-		if(action.equalsIgnoreCase("modif")) {
-			DataCancha Cancha = new DataCancha();
-			LinkedList<Cancha> list = Cancha.getall();
-			request.getSession().setAttribute("lista", list);
-			response.sendRedirect(modif);
-		}
-		if(action.equalsIgnoreCase("editar")) {
-			int numC=Integer.parseInt((String) request.getParameter("numC"));
-			DataCancha dCancha= new DataCancha();
-			Cancha c=(Cancha)dCancha.getOne(numC);
-			request.getSession().setAttribute("Cancha", c);
-			response.sendRedirect(edit);
-		}
-		if(action.equalsIgnoreCase("Actualizar")) {
-			int numC=Integer.parseInt(request.getParameter("numC"));
-			String nombre = request.getParameter("nombre");
-			
-			c.setNroCancha(numC);
-			c.setNombre(nombre);
-			
-			
-			DataCancha.update(c);
-			preparalist(request, response);
-			response.sendRedirect(listar);
-		}
-		if(action.equalsIgnoreCase("eliminar")) {
-			int numC=Integer.parseInt(request.getParameter("numC"));
-			c.setNroCancha(numC);
-			DataCancha.delete(c);
-			preparalist(request, response);
-			response.sendRedirect(listar);
-		}
-		
-		if(action.equalsIgnoreCase("listar")) {
-			preparalist(request, response);
-			response.sendRedirect(listar);
-		}
-		
-		doGet(request, response);
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				request.setAttribute("msg", "Ocurrio un error, vuelva a intentarlo.");
+				request.getRequestDispatcher(administrar).forward(request, response);
+			}	
+			break;
+		case "administrar": // muestro lista de jugadores para seleccionar si quiero editar/eliminar/agregar algunos 
+			try
+			{	
+				listCanchas(request, response);
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				request.setAttribute("msg", "Ocurrio un error al buscar la lista de Equipos, vuelva a intentarlo.");
+				request.getRequestDispatcher("index.jsp").forward(request, response);
+			}	
+			break;
+		case "formEdit": // preparo el jugador a editar y muestro la pagina jsp con sus datos
+			try
+			{	
+				preparaCanchaEdit(request,response);
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				request.setAttribute("msg", "Ocurrio un error al buscar el Equipo seleccionado, vuelva a intentarlo.");
+				request.getRequestDispatcher(administrar).forward(request, response);
+			}			
+			break;	
+		default: // falta agregar mensaje de error
+			break;
+		}	
 	}
-	
-	private void preparalist(HttpServletRequest request, HttpServletResponse response) {
-		DataCancha Cancha = new DataCancha();
-		LinkedList<Cancha> list = Cancha.getall();
-		request.getSession().setAttribute("lista", list);
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
+		String action=request.getParameter("accion");	
+		switch(action) {
+		case "add": // muestro jsp para rellenar datos del nuevo jugador
+			try
+			{	
+				addCancha(request, response);	
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				request.setAttribute("msg", "Ocurrio un error, vuelva a intentarlo.");
+				request.getRequestDispatcher(administrar).forward(request, response);
+			}	
+			break;
+		case "update": // muestro lista de jugadores para seleccionar si quiero editar/eliminar/agregar algunos 
+			try
+			{	
+				updateCancha(request, response);
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				request.setAttribute("msg", "Ocurrio un error al buscar la lista de Equipos, vuelva a intentarlo.");
+				request.getRequestDispatcher("index.jsp").forward(request, response);
+			}	
+			break;
+		case "delete": // preparo el jugador a editar y muestro la pagina jsp con sus datos
+			try
+			{	
+				deleteCancha(request,response);
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				request.setAttribute("msg", "Ocurrio un error al buscar el Equipo seleccionado, vuelva a intentarlo.");
+				request.getRequestDispatcher(administrar).forward(request, response);
+			}	
+			break;	
+		default: // falta agregar mensaje de error
+			break;
+		}				
+	}		
+	private void listCanchas(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		CanchaLogic canchaL= new CanchaLogic();
+		LinkedList<Cancha> list = canchaL.getAll();
+		request.setAttribute("listaCancha", list);
+		request.getRequestDispatcher(administrar).forward(request, response);
 	}
-
+	private void addCancha(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Cancha cancha= new Cancha();
+		CanchaLogic canchaL= new CanchaLogic();
+		cancha.setNroCancha(Integer.parseInt(request.getParameter("NumC")));
+		cancha.setNombre(request.getParameter("nombre"));
+		canchaL.add(cancha);
+		listCanchas(request, response);	
+	}
+	private void preparaCanchaEdit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Cancha cancha= new Cancha();
+		CanchaLogic canchaL= new CanchaLogic();
+		cancha.setNroCancha(Integer.parseInt(request.getParameter("numC")));
+		cancha=canchaL.getOne(cancha);
+		request.setAttribute("cancha", cancha);
+		request.getRequestDispatcher(showFormEdit).forward(request, response);
+	}
+	private void updateCancha(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Cancha cancha= new Cancha();
+		CanchaLogic canchaL= new CanchaLogic();	
+		cancha.setNroCancha(Integer.parseInt(request.getParameter("numC")));
+		cancha.setNombre(request.getParameter("nombre"));
+		canchaL.update(cancha);	
+		listCanchas(request, response);
+	}
+	private void deleteCancha(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Cancha cancha= new Cancha();
+		CanchaLogic canchaL= new CanchaLogic();
+		cancha.setNroCancha(Integer.parseInt(request.getParameter("numC")));
+		canchaL.delete(cancha);
+		listCanchas(request, response);
+	}
 }

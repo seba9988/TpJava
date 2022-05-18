@@ -19,7 +19,9 @@
 <body>
 <%@ include file="/Include/Head.html" %>
     <br>
-
+ 	<form action="JugadorServlet" method=get>
+    	<button type="submit" class="btn btn-primary" name="accion" value="formAdd">Agregar</button>
+    </form>
 
 <div class="container-fluid">
     <br>
@@ -38,9 +40,7 @@
             <th>Equipo</th>
             <th></th>
         </tr>
-        <form action="JugadorServlet" method=get>
-    	<button type="submit" class="btn btn-primary" name="accion" value="formAdd">Agregar</button>
-    </form>
+       
     <span style="color: red;"><%request.getAttribute("msg");%></span>
         <%
        		LinkedList<Jugador>list= (LinkedList<Jugador>)request.getAttribute("listJugadores");

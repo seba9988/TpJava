@@ -1,6 +1,5 @@
 package data;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,15 +10,10 @@ import entities.Cancha;
 
 public class DataCancha {
 		public LinkedList<Cancha> getAll(){	
-			DbConnector conexion = new DbConnector();
-			Connection cn = null;
-			Statement stm = null;
-			ResultSet rs = null;
 			LinkedList<Cancha> canchas= new LinkedList<>();	
-			try {
-				cn = conexion.conectar();
-				stm = cn.createStatement();
-				rs = stm.executeQuery("Select * from cancha");			
+			String getAllStatement="Select numCancha, nombre from cancha where fecha_baja is null";
+			try(Statement stm = DbConnector.getInstancia().getConn().createStatement();
+				ResultSet rs= stm.executeQuery(getAllStatement);) {		
 				while (rs.next()) {
 					Cancha c=new Cancha();
 					c.setNroCancha(rs.getInt("numCancha"));
@@ -31,62 +25,39 @@ public class DataCancha {
 				e.printStackTrace();
 			} 
 			finally {
-				try {
-					if (rs!= null) {
-						rs.close();
-					}				
-					if (stm != null) {
-						stm.close();
-					}					
-					if (cn != null) {
-						cn.close();
-					}
+				try {	
+					DbConnector.getInstancia().releaseConn();
 				} catch (Exception e2) {
 					e2.printStackTrace();
 				}
 			}
 			return canchas;
 		}
-		public Cancha getOne(Cancha c) {
-			DbConnector conexion = new DbConnector();
-			Connection cn = null;
-			PreparedStatement ps=null;
-			Cancha cancha = new Cancha();
-		    try {
-		    	cn = conexion.conectar();
-				ps =cn.prepareStatement("Select * from cancha where numCancha=?");
-				ps.setInt(1, c.getNroCancha());
-				ResultSet rs=ps.executeQuery();  
-		        while (rs.next()) {				
-					cancha.setNroCancha(rs.getInt("numCancha"));
-					cancha.setNombre(rs.getString("nombre"));
-		        }				
-		        if(ps!=null)ps.close();
-		        cn.close();	        
+		public Cancha getOne(Cancha cancha) {
+			String getOneStatement="Select numCancha, nombre from cancha where numCancha=? and fecha_baja is null";
+		    try(PreparedStatement ps=DbConnector.getInstancia().getConn().prepareStatement(getOneStatement);) {
+				ps.setInt(1, cancha.getNroCancha());
+				try(ResultSet rs=ps.executeQuery();){
+					while (rs.next()) {	
+						cancha.setNroCancha(rs.getInt("numCancha"));
+						cancha.setNombre(rs.getString("nombre"));
+					}	
+				}
 		    } catch (SQLException ex) {
 		        ex.printStackTrace();
 		    }
 		    finally {
-				try {
-					if (ps!= null) {
-						ps.close();
-					}				
-					if (cn != null) {
-						cn.close();
-					}
+				try {	
+					DbConnector.getInstancia().releaseConn();				
 				} catch (Exception e2) {
 					e2.printStackTrace();
 				}
 			}
-		return c;
+		return cancha;
 			}
 		public void add (Cancha c) {  
-				DbConnector conexion = new DbConnector();
-				Connection cn = null;
-	    		PreparedStatement ps=null;
-		        try {
-		        	cn = conexion.conectar();
-		    		ps=cn.prepareStatement("insert into cancha(numCancha,nombre) values (?,?)");
+				String addStatement="insert into cancha(numCancha,nombre) values (?,?)";	    		
+		        try(PreparedStatement ps=DbConnector.getInstancia().getConn().prepareStatement(addStatement);) {
 		    		ps.setInt(1, c.getNroCancha());
 		    		ps.setString(2, c.getNombre());     
 		            ps.executeUpdate();          
@@ -95,49 +66,32 @@ public class DataCancha {
 		        }
 				finally {
 					try {
-						if (ps!= null) {
-							ps.close();
-						}					
-						if (cn != null) {
-							cn.close();
-						}
+						DbConnector.getInstancia().releaseConn();
 					} catch (Exception e2) {
 						e2.printStackTrace();
 					}
 				}
 			}		
 		public void delete(Cancha c) {
-				DbConnector conexion = new DbConnector();
-				Connection cn = null;
-		    	PreparedStatement ps=null;
-			    try {
-			    	cn = conexion.conectar();
-			    	ps = cn.prepareStatement("delete from cancha where numCancha=?");
+				String deleteStatement="update cancha ca set ca.fecha_baja=CURRENT_DATE where ca.numCancha not in(select distinct ca.numCancha from partido pa inner join cancha ca on ca.numCancha=pa.numCancha WHERE PA.fecha>= CURRENT_DATE and ca.numCancha=?) and ca.numCancha=?";		    	
+			    try(PreparedStatement ps= DbConnector.getInstancia().getConn().prepareStatement(deleteStatement);) {
 					ps.setInt(1, c.getNroCancha());
-					ps.executeUpdate();  				       
+					ps.setInt(2, c.getNroCancha());
+					ps.executeUpdate();			       
 			    } catch (SQLException ex) {
-			        ex.printStackTrace();
+			        ex.printStackTrace();			       
 			    }	
 			    finally {
 					try {
-						if (ps!= null) {
-							ps.close();
-						}				
-						if (cn != null) {
-							cn.close();
-						}
+						DbConnector.getInstancia().releaseConn();
 					} catch (Exception e2) {
 						e2.printStackTrace();
 					}
 				}
 		}
 		public void update (Cancha c) {		   
-			DbConnector conexion = new DbConnector();
-			Connection cn = null;
-			PreparedStatement ps=null;
-		    try {
-		    	cn = conexion.conectar();
-				ps=cn.prepareStatement("update cancha set nombre=? where numCancha=?");
+			String updateStatement="update cancha set nombre=? where numCancha=? and fecha_baja is null";
+		    try (PreparedStatement ps=DbConnector.getInstancia().getConn().prepareStatement(updateStatement);){
 				ps.setString(1, c.getNombre());
 				ps.setInt(2,c.getNroCancha());
 				ps.executeUpdate();   
@@ -145,17 +99,11 @@ public class DataCancha {
 		        ex.printStackTrace();
 		    }
 		    finally {
-				try {
-					if (ps!= null) {
-						ps.close();
-					}				
-					if (cn != null) {
-						cn.close();
-					}
+				try {	
+					DbConnector.getInstancia().releaseConn();
 				} catch (Exception e2) {
 					e2.printStackTrace();
 				}
 			}
 		}
-
 		}

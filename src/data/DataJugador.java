@@ -178,7 +178,6 @@ public class DataJugador {
 	public void delete(Jugador j) {
 			PreparedStatement ps=null;
 		    try {
-		    	System.out.println("sssssssssssss");
 		    	ps = DbConnector.getInstancia().getConn().prepareStatement("delete from jugador where dniJugador=?");
 				ps.setString(1, j.getDni());
 				ps.executeUpdate();  		

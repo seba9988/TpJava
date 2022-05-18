@@ -22,8 +22,6 @@ public class DataEquipo {
 			e.setPuntaje(rs.getInt("eq.puntaje"));
 			e.setDifGoles(rs.getInt("eq.difGoles"));			
 			equipos.add(e);		
-			System.out.println("addEquipo");
-			System.out.println(e);
 		}	
 	} catch (SQLException e) {
 		e.printStackTrace();		

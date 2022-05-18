@@ -1,12 +1,10 @@
 
 <%@ page language="java" import="java.util.*,java.sql.*"
-	import="Data.DataCancha"
 	import="java.util.LinkedList"
-	import="Entidades.Cancha"
+	import="entities.Cancha"
 	import="java.util.Iterator"%>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -22,12 +20,11 @@
    
     <br>
 	<%	
-		Cancha c=(Cancha)session.getAttribute("Cancha");
-		System.out.println(c);
+		Cancha c=(Cancha)request.getAttribute("cancha");
 	%>
     <div class="container border text-center">
       <p class="h1">Modificar Cancha</p>
-    <form action="CanchaControl" method=post>
+    <form action="CanchaServlet" method=post>
       	<div class="row mt-3">
           <div class="col-sm-8">
             <input type="hidden" name="numC" class="form-control" value="<%=c.getNroCancha() %>"required>
@@ -41,18 +38,13 @@
         </div>
         <div class="row mt-3 mb-3">
           <div class="offset-sm-1 col-sm-10">
-            <button type="submit" class="btn btn-primary" name="accion" value="Actualizar"> Cargar</button>
-          </div>
-          
+            <button type="submit" class="btn btn-primary" name="accion" value="update"> Cargar</button>
+          </div>       
         </div>
       </form>
     </div>
-
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
       crossorigin="anonymous"></script>
-
 </body>
-
 </html>
