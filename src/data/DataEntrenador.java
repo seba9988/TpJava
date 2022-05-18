@@ -14,17 +14,12 @@ import entities.Equipo;
 public class DataEntrenador {
 
 		public LinkedList<Entrenador> getAll(){	
-			DbConnector conexion = new DbConnector();
-			Connection cn = null;
-			Statement stm = null;
-			ResultSet rs = null;
+			String getAllStatement="Select ent.dniEntrenador,ent.nombre,ent.apellido,ent.fechaNac"
+					+ ",eq.id,eq.razonSocial,eq.localidad,eq.puntaje,eq.difGoles "
+					+ "from entrenador ent inner join equipo eq";
 			LinkedList<Entrenador> entrenadores= new LinkedList<>();			
-			try {
-				cn = conexion.conectar();
-				stm = cn.createStatement();
-				rs = stm.executeQuery("Select ent.dniEntrenador,ent.nombre,ent.apellido,ent.fechaNac"
-						+ ",eq.id,eq.razonSocial,eq.localidad,eq.puntaje,eq.difGoles "
-						+ "from entrenador ent inner join equipo eq"); // falta escudo			
+			try (Statement stm = DbConnector.getInstancia().getConn().createStatement();
+				ResultSet rs =stm.executeQuery(getAllStatement);){	
 				while (rs.next()) {
 					Entrenador entrenador=new Entrenador();
 					Equipo equipo= new Equipo();
@@ -44,15 +39,7 @@ public class DataEntrenador {
 				e.printStackTrace();			
 			} finally {
 				try {
-					if (rs!= null) {
-						rs.close();
-					}		
-					if (stm != null) {
-						stm.close();
-					}		
-					if (cn != null) {
-						cn.close();
-					}
+					DbConnector.getInstancia().releaseConn();
 				} catch (Exception e2) {
 					e2.printStackTrace();
 				}
@@ -60,19 +47,14 @@ public class DataEntrenador {
 			return entrenadores;
 		}
 		public Entrenador getOne(Entrenador e) {
-			DbConnector conexion = new DbConnector();
-			Connection cn = null;
-			PreparedStatement ps=null;
-			ResultSet rs=null;
+			String getOneStatement="Select ent.dniEntrenador,ent.nombre,ent.apellido,ent.fechaNac"
+					+ ",eq.id,eq.razonSocial,eq.localidad,eq.puntaje,eq.difGoles "
+					+ "from entrenador ent inner join equipo eq where ent.dniEntrenador=?";		
 			Entrenador entrenador = new Entrenador();
 			Equipo equipo=new Equipo();
-		    try {
-		    	cn = conexion.conectar();
-				ps =cn.prepareStatement("Select ent.dniEntrenador,ent.nombre,ent.apellido,ent.fechaNac"
-								+ ",eq.id,eq.razonSocial,eq.localidad,eq.puntaje,eq.difGoles "
-								+ "from entrenador ent inner join equipo eq where ent.dniEntrenador=?");
+		    try(PreparedStatement ps=DbConnector.getInstancia().getConn().prepareStatement(getOneStatement);) {
 				ps.setString(1, e.getDni());
-                rs=ps.executeQuery();  
+				try(ResultSet rs=ps.executeQuery();){
 		        while (rs.next()) {	
 					entrenador.setDni(rs.getString("dniEntrenador"));
 					entrenador.setNombre(rs.getString("nombre"));
@@ -84,21 +66,14 @@ public class DataEntrenador {
 					equipo.setPuntaje(rs.getInt("eq.puntaje"));
 					equipo.setDifGoles(rs.getInt("eq.difGoles"));
 					entrenador.setEquipo(equipo);
-		        }			      
+		        }	
+				}
 		    } catch (SQLException ex) {
 		        ex.printStackTrace();
 		    }
 		    finally {
 				try {
-					if (rs!= null) {
-						rs.close();
-					}	
-					if (ps != null) {
-						ps.close();
-					}		
-					if (cn != null) {
-						cn.close();
-					}
+					DbConnector.getInstancia().releaseConn();
 				} catch (Exception e2) {
 					e2.printStackTrace();
 				}
@@ -106,12 +81,8 @@ public class DataEntrenador {
 		return entrenador;
 			}
 		public void add (Entrenador e) {	   
-				DbConnector conexion = new DbConnector();
-				Connection cn = null;
-	    		PreparedStatement ps=null;
-		        try {
-		        	cn = conexion.conectar();
-		    		ps=cn.prepareStatement("insert into entrenador(dniEntrenador,nombre,apellido,fechaNac) values (?,?,?,?)");
+			String addStatement="insert into entrenador(dniEntrenador,nombre,apellido,fechaNac) values (?,?,?,?)";
+		        try(PreparedStatement ps=DbConnector.getInstancia().getConn().prepareStatement(addStatement);) {
 		    		ps.setString(1, e.getDni());
 		    		ps.setString(2, e.getNombre());
 					ps.setString(3,e.getApellido());
@@ -122,24 +93,15 @@ public class DataEntrenador {
 		        }
 		        finally {
 					try {
-						if (ps!= null) {
-							ps.close();
-						}					
-						if (cn != null) {
-							cn.close();
-						}
+						DbConnector.getInstancia().releaseConn();
 					} catch (Exception e2) {
 						e2.printStackTrace();
 					}
 				}
 			}	
 		public void delete(Entrenador e) {
-				DbConnector conexion = new DbConnector();
-				Connection cn = null;
-				PreparedStatement ps=null;
-			    try {
-			    	cn = conexion.conectar();
-			    	ps = cn.prepareStatement("delete from entrenador ent where ent.dniEntrenador=?");
+			String DeleteStatement="delete from entrenador ent where ent.dniEntrenador=?";		
+			    try(PreparedStatement ps=DbConnector.getInstancia().getConn().prepareStatement(DeleteStatement);) {
 					ps.setString(1, e.getDni());
 					ps.executeUpdate();  			        
 			    } catch (SQLException ex) {
@@ -147,24 +109,15 @@ public class DataEntrenador {
 			    }
 			    finally {
 					try {
-						if (ps!= null) {
-							ps.close();
-						}					
-						if (cn != null) {
-							cn.close();
-						}
+						DbConnector.getInstancia().releaseConn();
 					} catch (Exception e2) {
 						e2.printStackTrace();
 					}
 				}	
 		}
-		public void update (Entrenador e) {		   
-			DbConnector conexion = new DbConnector();
-			Connection cn = null;
-			PreparedStatement ps=null;
-		    try {
-		    	cn = conexion.conectar();
-				ps=cn.prepareStatement("update entrenador ent set ent.nombre=?, ent.apellido=?, ent.fechaNac=?,ent.idEquipo=? where ent.dniEntrenador=?");
+		public void update (Entrenador e) {		
+			String updateStatement="update entrenador ent set ent.nombre=?, ent.apellido=?, ent.fechaNac=?,ent.idEquipo=? where ent.dniEntrenador=?";			
+		    try(PreparedStatement ps=DbConnector.getInstancia().getConn().prepareStatement(updateStatement);) {
 				ps.setString(1, e.getNombre());
 				ps.setString(2,e.getApellido());
 				ps.setObject(3,e.getFecha_nacimiento());
@@ -176,28 +129,19 @@ public class DataEntrenador {
 		    }
 		    finally {
 				try {
-					if (ps!= null) {
-						ps.close();
-					}					
-					if (cn != null) {
-						cn.close();
-					}
+					DbConnector.getInstancia().releaseConn();
 				} catch (Exception e2) {
 					e2.printStackTrace();
 				}
 			}	
 		}
-		public LinkedList<Entrenador> getEntrenadoresDisp() // lista de entrenadores sin equipo
-		{	DbConnector conexion = new DbConnector();
-		Connection cn = null;
-		Statement stm = null;
-		ResultSet rs = null;
-		LinkedList<Entrenador> entrenadores= new LinkedList<>();			
-		try {
-			cn = conexion.conectar();
-			stm = cn.createStatement();
-			rs = stm.executeQuery("Select ent.dniEntrenador,ent.nombre,ent.apellido,ent.fechaNac"
-					+ " from entrenador ent where ent.idEquipo IS NULL"); // falta escudo			
+		public LinkedList<Entrenador> getEntrenadoresDisp() /* lista de entrenadores sin equipo*/ {	
+			String getEntrenadoresDispStmt="Select ent.dniEntrenador,ent.nombre,ent.apellido,ent.fechaNac"
+					+ " from entrenador ent where ent.idEquipo IS NULL";
+			
+			LinkedList<Entrenador> entrenadores= new LinkedList<>();			
+			try(Statement stm = DbConnector.getInstancia().getConn().createStatement();
+				ResultSet rs = stm.executeQuery(getEntrenadoresDispStmt);) {		
 			while (rs.next()) {
 				Entrenador entrenador=new Entrenador();
 				entrenador.setDni(rs.getString("ent.dniEntrenador"));
@@ -205,20 +149,12 @@ public class DataEntrenador {
 				entrenador.setApellido(rs.getString("ent.apellido"));
 				entrenador.setFecha_nacimiento(rs.getObject("ent.fechaNac",LocalDate.class));
 				entrenadores.add(entrenador);	
-			}		
-		} catch (SQLException e) {
-			e.printStackTrace();			
-		} finally {
-			try {
-				if (rs!= null) {
-					rs.close();
 				}		
-				if (stm != null) {
-					stm.close();
-				}		
-				if (cn != null) {
-					cn.close();
-				}
+			} 	catch (SQLException e) {
+				e.printStackTrace();			
+			} finally {
+				try {
+					DbConnector.getInstancia().releaseConn();
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}

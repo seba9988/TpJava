@@ -8,12 +8,10 @@ import entities.*;
 public class DataEquipo {
 	
 	public LinkedList<Equipo> getAll(){	
-	Statement stm = null;
-	ResultSet rs = null;
+	String getAllStatement="Select eq.id,eq.razonSocial,eq.localidad,eq.puntaje,eq.difGoles from equipo eq where eq.fecha_baja is null";
 	LinkedList<Equipo> equipos= new LinkedList<>();	
-	try {
-		stm = DbConnector.getInstancia().getConn().createStatement();
-		rs = stm.executeQuery("Select eq.id,eq.razonSocial,eq.localidad,eq.puntaje,eq.difGoles from equipo eq where eq.fecha_baja is null");	
+	try(Statement stm = DbConnector.getInstancia().getConn().createStatement();
+		ResultSet rs = stm.executeQuery(getAllStatement);) {	
 		while (rs.next()) {
 			Equipo e=new Equipo();
 			e.setIdEquipo(rs.getInt("eq.id"));
@@ -27,8 +25,6 @@ public class DataEquipo {
 		e.printStackTrace();		
 	} finally {
 		try {
-			if (rs!= null) {rs.close();}		
-			if (stm != null) {stm.close();}		
 			DbConnector.getInstancia().releaseConn();
 		} catch (Exception e2) {
 			e2.printStackTrace();
@@ -37,37 +33,35 @@ public class DataEquipo {
 	return equipos;
 }	
 	public Equipo getOne(Equipo e) {
-	PreparedStatement ps=null;
+	String getOneStatement="Select eq.id,eq.razonSocial,eq.localidad,eq.puntaje,eq.difGoles "
+			+ "from equipo eq where id=? and eq.fecha_baja is null";
 	Equipo equipo = new Equipo();
-    try {
-		ps =DbConnector.getInstancia().getConn().prepareStatement("Select eq.id,eq.razonSocial,eq.localidad,eq.puntaje,eq.difGoles "
-				+ "from equipo eq where id=? and eq.fecha_baja is null");
+    try(PreparedStatement ps=DbConnector.getInstancia().getConn().prepareStatement(getOneStatement);) {
 		ps.setInt(1, e.getIdEquipo());
-		ResultSet rs=ps.executeQuery();  
-        while (rs.next()) {
-        	equipo.setIdEquipo(rs.getInt("eq.id"));
-        	equipo.setNombre(rs.getString("eq.razonSocial"));
-        	equipo.setLocalidad(rs.getString("eq.localidad"));
-        	equipo.setPuntaje(rs.getInt("eq.puntaje"));
-        	equipo.setDifGoles(rs.getInt("eq.difGoles"));
-        }	
+		try(ResultSet rs=ps.executeQuery(); ){
+			 while (rs.next()) {
+		        	equipo.setIdEquipo(rs.getInt("eq.id"));
+		        	equipo.setNombre(rs.getString("eq.razonSocial"));
+		        	equipo.setLocalidad(rs.getString("eq.localidad"));
+		        	equipo.setPuntaje(rs.getInt("eq.puntaje"));
+		        	equipo.setDifGoles(rs.getInt("eq.difGoles"));
+		        }	
+		}		       
     } catch (SQLException ex) {
         ex.printStackTrace();
     }
     finally {
-		try {
-			if (ps!= null) {ps.close();}			
+		try {			
 			DbConnector.getInstancia().releaseConn();
 		} catch (Exception e2) {
 			e2.printStackTrace();
 	}
 		}
-return equipo;
+    return equipo;
 	}
 	public void add (Equipo e) { 
-		PreparedStatement ps=null;
-        try {
-    		ps=DbConnector.getInstancia().getConn().prepareStatement("insert into equipo(id,razonSocial,localidad,puntaje,difGoles) values (?,?,?,?,?)");
+		String addStatement="insert into equipo(id,razonSocial,localidad,puntaje,difGoles) values (?,?,?,?,?)";
+        try(PreparedStatement ps=DbConnector.getInstancia().getConn().prepareStatement(addStatement);) {
     		ps.setInt(1, e.getIdEquipo());
     		ps.setString(2, e.getNombre());
 			ps.setString(3,e.getLocalidad());
@@ -78,8 +72,7 @@ return equipo;
         	ex.printStackTrace();
         }
         finally {
-    		try {
-    			if (ps!= null) {ps.close();}			
+    		try {			
     			DbConnector.getInstancia().releaseConn();
     		} catch (Exception e2) {
     			e2.printStackTrace();
@@ -142,11 +135,10 @@ return equipo;
     		}
 	}
 	public void update (Equipo e) {	   
-	PreparedStatement ps=null;
-    try {
-		ps=DbConnector.getInstancia().getConn().prepareStatement("update equipo eq "
-				+ "set eq.razonSocial=?, eq.localidad=?, eq.puntaje=?, eq.difGoles=?"
-				+ " where eq.id=? and eq.fecha_baja is null");
+	String updateStatement="update equipo eq "
+			+ "set eq.razonSocial=?, eq.localidad=?, eq.puntaje=?, eq.difGoles=?"
+			+ " where eq.id=? and eq.fecha_baja is null";
+    try(PreparedStatement ps=DbConnector.getInstancia().getConn().prepareStatement(updateStatement);) {	
 		ps.setString(1, e.getNombre());
 		ps.setString(2,e.getLocalidad());
 		ps.setInt(3,e.getPuntaje());
@@ -157,12 +149,11 @@ return equipo;
         ex.printStackTrace();
     }
     finally {
-		try {
-			if (ps!= null) {ps.close();}			
+		try {		
 			DbConnector.getInstancia().releaseConn();
 		} catch (Exception e2) {
 			e2.printStackTrace();
 		}
 		}
-}
+	}
 }
