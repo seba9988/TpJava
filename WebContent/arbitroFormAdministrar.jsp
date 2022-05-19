@@ -1,6 +1,6 @@
 <%@ page import="data.DataArbitro"
 	import="java.util.LinkedList"
-	import="Entidades.Arbitro"
+	import="entities.Arbitro"
 	import="java.util.Iterator"%>
 
 <!DOCTYPE html>
@@ -18,9 +18,12 @@
 
 <body>
 <%@ include file="/Include/Head.html" %>
+ <br>
+<form action="ArbitroServlet" method=get>
+    	<button type="submit" class="btn btn-primary" name="accion" value="formAdd">Agregar</button>
+    </form>
     <br>
-
-.<div class="container-fluid">
+<div class="container-fluid">
     <br>
     <table id="tableArbitro" class="table table-bordered ">
         <tr>
@@ -30,32 +33,29 @@
             <th></th>
         </tr>
         <%
-       		LinkedList<Arbitro>list= (LinkedList<Arbitro>)session.getAttribute("lista");
-			for(Arbitro listA : list) {
-			
+       		LinkedList<Arbitro>list= (LinkedList<Arbitro>)request.getAttribute("listArbitros");
+			for(Arbitro listA : list) {	
         %>
         <tr>
         	<th><%=listA.getDni()%></th>
             <th><%=listA.getNombre()%></th>
             <th><%=listA.getApellido()%></th>
             <th><%=listA.getFecha_nacimiento()%></th>
-            <th><form action="ArbitroControl" method=post>
+            <th><form action="ArbitroServlet" method=get>
             	<input type="hidden" name="dni" class="form-control" value="<%=listA.getDni()%>">	
-            	<button type="submit" class="btn btn-primary" name="accion" value="editar">Editar</button>
-            	<button type="submit" class="btn btn-primary" name="accion" value="eliminar">Eliminar</button>
+            	<button type="submit" class="btn btn-primary" name="accion" value="formEdit">Editar</button>
+            	</form>
+            	<form action="ArbitroServlet" method=post>
+            	<input type="hidden" name="dni" class="form-control" value="<%=listA.getDni()%>">
+            	<button type="submit" class="btn btn-primary" name="accion" value="delete">Eliminar</button>
            		</form>
             </th>
         </tr> 
         <%}%>
     </table>
-   
-</div>
-
-
+ </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
       crossorigin="anonymous"></script>
-
 </body>
-
 </html>

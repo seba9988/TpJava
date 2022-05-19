@@ -130,12 +130,6 @@ public class JugadorServlet extends HttpServlet {
 		request.setAttribute("listJugadores", list);
 		request.getRequestDispatcher(administrar).forward(request, response);
 	}
-	/**
-	 * @param request
-	 * @param response
-	 * @throws ServletException
-	 * @throws IOException
-	 */
 	private void listJugadoresByPos(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Jugador jugador= new Jugador();
 		JugadorLogic jugadorL= new JugadorLogic();

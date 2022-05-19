@@ -16,7 +16,7 @@
                         </a>
                         <ul class="dropdown-menu w-500">
                         	<form action="EquipoServlet" method=get>
-                          <li><button class="btn btn-sm btn-light" type="submit" name="accion" value="Administrar">Administrar Equipos</button></li>
+                          <li><button class="btn btn-sm btn-light" type="submit" name="accion" value="administrar">Administrar Equipos</button></li>
                           </form>
                         </ul>
                         
@@ -48,10 +48,8 @@
                           Entrenador
                         </a>
                         <ul class="dropdown-menu">
-                         	<form action="EntrenadorControl" method=post>
-                          <li><button class="btn btn-sm btn-light w-100" type="submit" name="accion" value="add">Cargar Entrenador</button></li>
-                          <li><button class="btn btn-sm btn-light" type="submit" name="accion" value="modif">Modificar o Eliminar Entrenadores</button></li>
-                          <li><button class="btn btn-sm btn-light w-100" type="submit" name="accion" value="listar">Mostrar Entrenadores</button></li>
+                         	<form action="EntrenadorServlet" method=get>
+                          <li><button class="btn btn-sm btn-light" type="submit" name="accion" value="administrar">Modificar o Eliminar Entrenadores</button></li>
                           </form>
                         </ul>
                     </li> 
@@ -60,10 +58,8 @@
                           Arbitro
                         </a>
                         <ul class="dropdown-menu">
-                         	<form action="ArbitroControl" method=post>
-                          <li><button class="btn btn-sm btn-light w-100" type="submit" name="accion" value="add">Cargar Arbitro</button></li>
-                          <li><button class="btn btn-sm btn-light" type="submit" name="accion" value="modif">Modificar o Eliminar Arbitro</button></li>
-                          <li><button class="btn btn-sm btn-light w-100" type="submit" name="accion" value="listar">Mostrar Arbitro</button></li>
+                         	<form action="ArbitroServlet" method=get>
+                          <li><button class="btn btn-sm btn-light" type="submit" name="accion" value="administrar">Modificar o Eliminar Arbitro</button></li>
                           </form>
                         </ul>
                     </li> 
