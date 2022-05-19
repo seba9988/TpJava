@@ -16,12 +16,12 @@ public class DataJugador {
 		String getAllStatement="Select jug.dniJugador,jug.nombre,jug.apellido,jug.fechaNac,jug.posicion,jug.goles,jug.asistencias,jug.amarillas,jug.rojas,jug.partJugados"
 				+ ",eq.id,eq.razonSocial,eq.localidad,eq.puntaje,eq.difGoles "
 				+ "from jugador jug left join equipo eq on jug.idEquipo=eq.id";
-		Jugador jugador=new Jugador();
-		Equipo equipo= new Equipo();
 		LinkedList<Jugador> jugadores= new LinkedList<>();	
 		try (Statement stm = DbConnector.getInstancia().getConn().createStatement();
 			ResultSet rs = stm .executeQuery(getAllStatement);){			 
-			while (rs.next()) { // jugadores con equipo				
+			while (rs.next()) { // jugadores con equipo		
+				Jugador jugador=new Jugador();
+				Equipo equipo= new Equipo();
 				jugador.setDni(rs.getString("jug.dniJugador"));
 				jugador.setNombre(rs.getString("jug.nombre"));
 				jugador.setApellido(rs.getString("jug.apellido"));

@@ -4,127 +4,155 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.LinkedList;
 
-import javax.servlet.RequestDispatcher;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import data.DataArbitro;
 import entities.Arbitro;
-
-
+import logic.ArbitroLogic;
 /**
  * Servlet implementation class ArbitroControl
  */
-@WebServlet("/ArbitroControl")
-public class ArbitroServlet extends HttpServlet {
-	
-	String listar = "Arbitro-Listar.jsp";
-	String add="Arbitro-Add.jsp";
-	String modif="Arbitro-Modif.jsp";
-	String edit="Arbitro-Edit.jsp";
-	Arbitro a = new Arbitro();
+@WebServlet("/ArbitroServlet")
+public class ArbitroServlet extends HttpServlet {	
+	String showFormAdd="arbitroFormAdd.jsp";
+	String administrar="arbitroFormAdministrar.jsp";
+	String showFormEdit="arbitroFormEdit.jsp";
 	private static final long serialVersionUID = 1L;
        
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
     public ArbitroServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		
 		String action=request.getParameter("accion");
-		if(action.equalsIgnoreCase("add")) {
-			response.sendRedirect(add);
-		}
-		
-		if(action.equalsIgnoreCase("agregar")) {
-			String dni=request.getParameter("dni");
-			String nombre = request.getParameter("nombre");
-			String apellido = request.getParameter("apellido");
-			LocalDate fechaNac = LocalDate.parse(request.getParameter("fechaNac"));
-			
-			a.setDni(dni);
-			a.setNombre(nombre);
-			a.setApellido(apellido);
-			a.setFecha_nacimiento(fechaNac);
-			
-			if(DataArbitro.add(a)) {
-				preparalist(request, response);
-				response.sendRedirect(listar);
-			} else {
-				request.setAttribute("msg", "No se pudo cargar Equipo Vuelva a intentarlo");
-				RequestDispatcher rd= request.getRequestDispatcher(add);
-				rd.forward(request, response);
+		switch(action) {
+		case "formAdd": // muestro jsp para rellenar datos del nuevo jugador
+			try
+			{	
+				request.getRequestDispatcher(showFormAdd).forward(request, response);	
 			}
-			
-		}
-		
-		if(action.equalsIgnoreCase("modif")) {
-			DataArbitro Arbitro = new DataArbitro();
-			LinkedList<Arbitro> list = Arbitro.getall();
-			request.getSession().setAttribute("lista", list);
-			response.sendRedirect(modif);
-		}
-		if(action.equalsIgnoreCase("editar")) {
-			int dni=Integer.parseInt((String) request.getParameter("dni"));
-			DataArbitro dArbitro= new DataArbitro();
-			Arbitro a=(Arbitro)dArbitro.getOne(dni);
-			request.getSession().setAttribute("Arbitro", a);
-			response.sendRedirect(edit);
-		}
-		if(action.equalsIgnoreCase("Actualizar")) {
-			String dni=request.getParameter("dni");
-			String nombre = request.getParameter("nombre");
-			String apellido = request.getParameter("apellido");
-			LocalDate fechaNac = LocalDate.parse(request.getParameter("fechaNac"));
-			
-			a.setDni(dni);
-			a.setNombre(nombre);
-			a.setApellido(apellido);
-			a.setFecha_nacimiento(fechaNac);
-			
-			DataArbitro.update(a);
-			preparalist(request, response);
-			response.sendRedirect(listar);
-		}
-		if(action.equalsIgnoreCase("eliminar")) {
-			String dni=request.getParameter("dni");
-			a.setDni(dni);
-			DataArbitro.delete(a);
-			preparalist(request, response);
-			response.sendRedirect(listar);
-		}
-		
-		if(action.equalsIgnoreCase("listar")) {
-			preparalist(request, response);
-			response.sendRedirect(listar);
-		}
-		
-		doGet(request, response);
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				request.setAttribute("msg", "Ocurrio un error, vuelva a intentarlo.");
+				request.getRequestDispatcher(administrar).forward(request, response);
+			}	
+			break;
+		case "administrar": // muestro lista de jugadores para seleccionar si quiero editar/eliminar/agregar algunos 
+			try
+			{	
+				listArbitros(request, response);
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				request.setAttribute("msg", "Ocurrio un error al buscar la lista de Arbitros, vuelva a intentarlo.");
+				request.getRequestDispatcher("index.jsp").forward(request, response);
+			}	
+			break;
+		case "formEdit": // preparo el jugador a editar y muestro la pagina jsp con sus datos
+			try
+			{	
+				preparaArbitroEdit(request,response);
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				request.setAttribute("msg", "Ocurrio un error al buscar el Arbitro seleccionado, vuelva a intentarlo.");
+				request.getRequestDispatcher(administrar).forward(request, response);
+			}	
+			break;	
+		default: // falta agregar mensaje de error
+			break;
+		}	
 	}
-	
-	private void preparalist(HttpServletRequest request, HttpServletResponse response) {
-		DataArbitro Arbitro = new DataArbitro();
-		LinkedList<Arbitro> list = Arbitro.getall();
-		request.getSession().setAttribute("lista", list);
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String action=request.getParameter("accion");	
+		switch(action) {
+		case "add": // muestro jsp para rellenar datos del nuevo jugador
+			try
+			{	
+				addArbitro(request, response);	
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				request.setAttribute("msg", "Ocurrio un error, vuelva a intentarlo.");
+				request.getRequestDispatcher(administrar).forward(request, response);
+			}	
+			break;
+		case "update": // muestro lista de jugadores para seleccionar si quiero editar/eliminar/agregar algunos 
+			try
+			{	
+				updateArbitro(request, response);
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				request.setAttribute("msg", "Ocurrio un error al buscar la lista de Arbitros, vuelva a intentarlo.");
+				request.getRequestDispatcher("index.jsp").forward(request, response);
+			}	
+			break;
+		case "delete": // preparo el jugador a editar y muestro la pagina jsp con sus datos
+			try
+			{	
+				deleteArbitro(request,response);
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				request.setAttribute("msg", "Ocurrio un error al buscar el Arbitro seleccionado, vuelva a intentarlo.");
+				request.getRequestDispatcher(administrar).forward(request, response);
+			}	
+			break;	
+		default: // falta agregar mensaje de error
+			break;
+		}
+	}	
+	private void listArbitros(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		ArbitroLogic arbitroL= new ArbitroLogic();
+		LinkedList<Arbitro> list = arbitroL.getAll();
+		request.setAttribute("listArbitros", list);
+		request.getRequestDispatcher(administrar).forward(request, response);
 	}
-
+	private void preparaArbitroEdit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Arbitro arbitro=new Arbitro();
+		arbitro.setDni(request.getParameter("dni"));
+		ArbitroLogic arbitroL= new ArbitroLogic();
+		arbitro=arbitroL.getOne(arbitro);
+		request.setAttribute("arbitro", arbitro);
+		request.getRequestDispatcher(showFormEdit).forward(request, response);
+	}
+	private void addArbitro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Arbitro arbitro= new Arbitro();
+		ArbitroLogic arbitroL= new ArbitroLogic();
+		arbitro.setDni(request.getParameter("dni"));
+		
+		arbitro.setNombre(request.getParameter("nombre"));
+		arbitro.setApellido(request.getParameter("apellido"));
+		arbitro.setFecha_nacimiento(LocalDate.parse(request.getParameter("fechaNac")));
+		arbitroL.add(arbitro);
+		listArbitros(request, response);
+	}
+	private void updateArbitro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Arbitro arbitro= new Arbitro();
+		ArbitroLogic arbitroL= new ArbitroLogic();
+		arbitro.setDni(request.getParameter("dni"));
+		System.out.println(request.getParameter("dni"));
+		arbitro.setNombre(request.getParameter("nombre"));
+		arbitro.setApellido(request.getParameter("apellido"));
+		arbitro.setFecha_nacimiento(LocalDate.parse(request.getParameter("fechaNac")));	
+		arbitroL.update(arbitro);
+		listArbitros(request, response);
+	}
+	private void deleteArbitro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Arbitro arbitro= new Arbitro();
+		ArbitroLogic arbitroL=new ArbitroLogic();
+		arbitro.setDni(request.getParameter("dni"));
+		arbitroL.delete(arbitro);
+		listArbitros(request, response);
+	}
 }

@@ -1,6 +1,5 @@
 package data;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,69 +13,49 @@ import entities.Arbitro;
 public class DataArbitro {
 
 	public LinkedList<Arbitro> getAll(){	
-		DbConnector conexion = new DbConnector();
-		Connection cn = null;
-		Statement stm = null;
-		ResultSet rs = null;
+		String getAllStatement="select arb.dniArbitro, arb.nombre, arb.apellido,arb.fechaNac from arbitro arb where fecha_baja is null";
 		LinkedList<Arbitro> arbitros= new LinkedList<>();	
-		try {
-			cn = conexion.conectar();
-			stm = cn.createStatement();
-			rs = stm.executeQuery("Select * from arbitro");		
-			while (rs.next()) {
+		try(Statement stm=DbConnector.getInstancia().getConn().createStatement();
+			ResultSet rs=stm.executeQuery(getAllStatement);) {				
+			while (rs.next()) {	
 				Arbitro a=new Arbitro();
 				a.setDni(rs.getString("dniArbitro"));
 				a.setNombre(rs.getString("nombre"));
 				a.setApellido(rs.getString("apellido"));
 				a.setFecha_nacimiento(rs.getObject("fechaNac",LocalDate.class));		
-				arbitros.add(a);		
+				arbitros.add(a);
 			}	
 		} catch (SQLException e) {
 			e.printStackTrace();	
 		} finally {
 			try {
-				if (rs!= null) {
-					rs.close();
-				}		
-				if (stm != null) {
-					stm.close();
-				}		
-				if (cn != null) {
-					cn.close();
-				}
+				DbConnector.getInstancia().releaseConn();
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}
 		}
-		return arbitros;
+	return arbitros;
 	}
 	public Arbitro getOne(Arbitro a) {
-		DbConnector conexion = new DbConnector();
-		Connection cn = null;
-		PreparedStatement ps=null;
+		String getOneStatement="select arb.dniArbitro, arb.nombre, arb.apellido,arb.fechaNac from arbitro arb where fecha_baja is null and arb.dniArbitro=?";
+		
 		Arbitro arbitro = new Arbitro();
-	    try {
-	    	cn = conexion.conectar();
-			ps =cn.prepareStatement("Select * from arbitro where dniArbitro=?");
+	    try(PreparedStatement ps=DbConnector.getInstancia().getConn().prepareStatement(getOneStatement);) {
 			ps.setString(1, a.getDni());
-			ResultSet rs=ps.executeQuery();  
-	        while (rs.next()) {			
-	        	arbitro.setDni("dniArbitro");
-	        	arbitro.setNombre(rs.getString("nombre"));
-	        	arbitro.setApellido(rs.getString("apellido"));
-	        	arbitro.setFecha_nacimiento(rs.getObject("fechaNac",LocalDate.class));
-	        }			      
+			try(ResultSet rs=ps.executeQuery(); ){
+				while (rs.next()) {			
+		        	arbitro.setDni(rs.getString("arb.dniArbitro"));
+		        	arbitro.setNombre(rs.getString("arb.nombre"));
+		        	arbitro.setApellido(rs.getString("arb.apellido"));
+		        	arbitro.setFecha_nacimiento(rs.getObject("arb.fechaNac",LocalDate.class));
+		        }	
+			}		         		      
 	    } catch (SQLException ex) {
 	        ex.printStackTrace();
 	    }
 	    finally {
 			try {
-				if (ps!= null) {
-					ps.close();
-				}					
-				if (cn != null) {
-					cn.close();
-				}
+				DbConnector.getInstancia().releaseConn();
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}
@@ -84,12 +63,8 @@ public class DataArbitro {
 	return arbitro;
 		}
 	public void add (Arbitro a) {  
-			DbConnector conexion = new DbConnector();
-			Connection cn = null;
-    		PreparedStatement ps=null;
-	        try {
-	        	cn = conexion.conectar();
-	    		ps=cn.prepareStatement("insert into arbitro(dniArbitro,nombre,apellido,fechaNac) values (?,?,?,?)");
+			String addStatement="insert into arbitro(dniArbitro,nombre,apellido,fechaNac) values (?,?,?,?)";
+	        try(PreparedStatement ps=DbConnector.getInstancia().getConn().prepareStatement(addStatement);) {
 	    		ps.setString(1, a.getDni());
 	    		ps.setString(2, a.getNombre());
 				ps.setString(3,a.getApellido());
@@ -100,37 +75,26 @@ public class DataArbitro {
 	        }
 	        finally {
 				try {
-					if (ps!= null) {
-						ps.close();
-					}					
-					if (cn != null) {
-						cn.close();
-					}
+					DbConnector.getInstancia().releaseConn();
 				} catch (Exception e2) {
 					e2.printStackTrace();
 				}
 			}
 		}		
-	public void delete(Arbitro a) {
-			DbConnector conexion = new DbConnector();
-			Connection cn = null;
-			PreparedStatement ps=null;
-		    try {
-		    	cn = conexion.conectar();
-		    	ps = cn.prepareStatement("delete from arbitro where dniArbitro=?");
+	public void delete(Arbitro a) { // soft delete
+			String deleteStatement="update arbitro arb set arb.fecha_baja=CURRENT_DATE where arb.dniArbitro not in(select distinct arb.dniArbitro from partido pa inner join arbitro arb on arb.dniArbitro=pa.dniArbitro WHERE PA.fecha>= CURRENT_DATE and arb.dniArbitro=?) and arb.dniArbitro=?";			
+		    try(PreparedStatement ps=DbConnector.getInstancia().getConn().prepareStatement(deleteStatement);) {
 				ps.setString(1, a.getDni());
+				ps.setString(2, a.getDni());
 				ps.executeUpdate();  				        
 		    } catch (SQLException ex) {
 		        ex.printStackTrace();
 		    }	
 	}
 	public void update (Arbitro a) {		   
-		DbConnector conexion = new DbConnector();
-		Connection cn = null;
-		PreparedStatement ps=null;
-	    try {
-	    	cn = conexion.conectar();
-			ps=cn.prepareStatement("update arbitro set nombre=?, apellido=?, fechaNac=? where dniArbitro=?");
+		String updateStatement="update arbitro set nombre=?, apellido=?, fechaNac=? where dniArbitro=?";	
+		System.out.println(a);
+	    try(PreparedStatement ps=DbConnector.getInstancia().getConn().prepareStatement(updateStatement)) {
 			ps.setString(1, a.getNombre());
 			ps.setString(2,a.getApellido());
 			ps.setObject(3,a.getFecha_nacimiento());
@@ -141,16 +105,10 @@ public class DataArbitro {
 	    }
 	    finally {
 			try {
-				if (ps!= null) {
-					ps.close();
-				}					
-				if (cn != null) {
-					cn.close();
-				}
+				DbConnector.getInstancia().releaseConn();
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}
 		}
 	}
-
 	}

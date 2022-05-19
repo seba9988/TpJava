@@ -42,7 +42,7 @@ public class EquipoServlet extends HttpServlet {
 				request.getRequestDispatcher(administrar).forward(request, response);
 			}	
 			break;
-		case "Administrar": // muestro lista de equipos para seleccionar si quiero editar/eliminar/agregar algunos cambiar nombre de modif por otro mejor
+		case "administrar": // muestro lista de equipos para seleccionar si quiero editar/eliminar/agregar algunos cambiar nombre de modif por otro mejor
 			try
 			{	
 				listEquipos(request, response);
