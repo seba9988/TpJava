@@ -15,7 +15,7 @@ public class DataEntrenador {
 		public LinkedList<Entrenador> getAll(){	
 			String getAllStatement="Select ent.dniEntrenador,ent.nombre,ent.apellido,ent.fechaNac"
 					+ ",eq.id,eq.razonSocial,eq.localidad,eq.puntaje,eq.difGoles "
-					+ "from entrenador ent inner join equipo eq";
+					+ "from entrenador ent left join equipo eq on ent.idEquipo=eq.id";
 			LinkedList<Entrenador> entrenadores= new LinkedList<>();			
 			try (Statement stm = DbConnector.getInstancia().getConn().createStatement();
 				ResultSet rs =stm.executeQuery(getAllStatement);){	
@@ -99,7 +99,7 @@ public class DataEntrenador {
 				}
 			}	
 		public void delete(Entrenador e) {
-			String DeleteStatement="delete from entrenador ent where ent.dniEntrenador=?";		
+			String DeleteStatement="delete from entrenador where dniEntrenador=?";		
 			    try(PreparedStatement ps=DbConnector.getInstancia().getConn().prepareStatement(DeleteStatement);) {
 					ps.setString(1, e.getDni());
 					ps.executeUpdate();  			        
@@ -115,13 +115,12 @@ public class DataEntrenador {
 				}	
 		}
 		public void update (Entrenador e) {		
-			String updateStatement="update entrenador ent set ent.nombre=?, ent.apellido=?, ent.fechaNac=?,ent.idEquipo=? where ent.dniEntrenador=?";			
+			String updateStatement="update entrenador ent set ent.nombre=?, ent.apellido=?, ent.fechaNac=? where ent.dniEntrenador=?";			
 		    try(PreparedStatement ps=DbConnector.getInstancia().getConn().prepareStatement(updateStatement);) {
 				ps.setString(1, e.getNombre());
 				ps.setString(2,e.getApellido());
 				ps.setObject(3,e.getFecha_nacimiento());
-				ps.setInt(4, e.getEquipo().getIdEquipo());
-				ps.setString(5, e.getDni());
+				ps.setString(4, e.getDni());
 		        ps.executeUpdate();   
 		    } catch (SQLException ex) {
 		        ex.printStackTrace();
@@ -136,8 +135,7 @@ public class DataEntrenador {
 		}
 		public LinkedList<Entrenador> getEntrenadoresDisp() /* lista de entrenadores sin equipo*/ {	
 			String getEntrenadoresDispStmt="Select ent.dniEntrenador,ent.nombre,ent.apellido,ent.fechaNac"
-					+ " from entrenador ent where ent.idEquipo IS NULL";
-			
+					+ " from entrenador ent where ent.idEquipo IS NULL";		
 			LinkedList<Entrenador> entrenadores= new LinkedList<>();			
 			try(Statement stm = DbConnector.getInstancia().getConn().createStatement();
 				ResultSet rs = stm.executeQuery(getEntrenadoresDispStmt);) {		

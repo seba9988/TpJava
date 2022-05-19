@@ -49,7 +49,7 @@ public class JugadorServlet extends HttpServlet {
 			catch(Exception e)
 			{
 				e.printStackTrace();
-				request.setAttribute("msg", "Ocurrio un error al buscar la lista de Equipos, vuelva a intentarlo.");
+				request.setAttribute("msg", "Ocurrio un error al buscar la lista de Jugadores, vuelva a intentarlo.");
 				request.getRequestDispatcher("index.jsp").forward(request, response);
 			}	
 			break;
@@ -61,7 +61,7 @@ public class JugadorServlet extends HttpServlet {
 			catch(Exception e)
 			{
 				e.printStackTrace();
-				request.setAttribute("msg", "Ocurrio un error al buscar el Equipo seleccionado, vuelva a intentarlo.");
+				request.setAttribute("msg", "Ocurrio un error al buscar el Jugador seleccionado, vuelva a intentarlo.");
 				request.getRequestDispatcher(administrar).forward(request, response);
 			}	
 			break;	
@@ -73,7 +73,7 @@ public class JugadorServlet extends HttpServlet {
 			catch(Exception e)
 			{
 				e.printStackTrace();
-				request.setAttribute("msg", "Ocurrio un error al buscar el Equipo seleccionado, vuelva a intentarlo.");
+				request.setAttribute("msg", "Ocurrio un error al buscar el Jugador seleccionado, vuelva a intentarlo.");
 				request.getRequestDispatcher(administrar).forward(request, response);
 			}	
 			break;	
@@ -104,7 +104,7 @@ public class JugadorServlet extends HttpServlet {
 			catch(Exception e)
 			{
 				e.printStackTrace();
-				request.setAttribute("msg", "Ocurrio un error al buscar la lista de Equipos, vuelva a intentarlo.");
+				request.setAttribute("msg", "Ocurrio un error al buscar la lista de Jugadores, vuelva a intentarlo.");
 				request.getRequestDispatcher("index.jsp").forward(request, response);
 			}	
 			break;
@@ -116,7 +116,7 @@ public class JugadorServlet extends HttpServlet {
 			catch(Exception e)
 			{
 				e.printStackTrace();
-				request.setAttribute("msg", "Ocurrio un error al buscar el Equipo seleccionado, vuelva a intentarlo.");
+				request.setAttribute("msg", "Ocurrio un error al buscar el Jugador seleccionado, vuelva a intentarlo.");
 				request.getRequestDispatcher(administrar).forward(request, response);
 			}	
 			break;	

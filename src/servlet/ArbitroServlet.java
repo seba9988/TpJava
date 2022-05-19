@@ -129,8 +129,7 @@ public class ArbitroServlet extends HttpServlet {
 	private void addArbitro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Arbitro arbitro= new Arbitro();
 		ArbitroLogic arbitroL= new ArbitroLogic();
-		arbitro.setDni(request.getParameter("dni"));
-		
+		arbitro.setDni(request.getParameter("dni"));	
 		arbitro.setNombre(request.getParameter("nombre"));
 		arbitro.setApellido(request.getParameter("apellido"));
 		arbitro.setFecha_nacimiento(LocalDate.parse(request.getParameter("fechaNac")));
@@ -141,7 +140,6 @@ public class ArbitroServlet extends HttpServlet {
 		Arbitro arbitro= new Arbitro();
 		ArbitroLogic arbitroL= new ArbitroLogic();
 		arbitro.setDni(request.getParameter("dni"));
-		System.out.println(request.getParameter("dni"));
 		arbitro.setNombre(request.getParameter("nombre"));
 		arbitro.setApellido(request.getParameter("apellido"));
 		arbitro.setFecha_nacimiento(LocalDate.parse(request.getParameter("fechaNac")));	
