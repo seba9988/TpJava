@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import data.DataCancha;
 import entities.Cancha;
+import entities.Partido;
 
 public class CanchaLogic {
 	private DataCancha dCancha;
@@ -31,5 +32,8 @@ public class CanchaLogic {
 	{
 		dCancha.update(c);
 	}
-
+	public LinkedList<Cancha> getCanchasDisp(Partido partido) 
+	{
+		return dCancha.getCanchasDisp(partido);
+	}
 }

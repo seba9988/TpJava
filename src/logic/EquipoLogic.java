@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 import data.DataEquipo;
 import entities.Equipo;
+import entities.Partido;
 
 public class EquipoLogic {
 	private DataEquipo dEquipo;
@@ -32,6 +33,12 @@ public class EquipoLogic {
 	{
 		dEquipo.update(e);
 	}
-
-
+	public LinkedList<Equipo>  getEquiposDisp(Partido p)
+	{
+		return dEquipo.getEquiposDisp(p);
+	}
+	public boolean dispParaReprogramar(Partido partido) 
+	{
+		return dEquipo.dispParaReprogramar(partido);
+	}
 }

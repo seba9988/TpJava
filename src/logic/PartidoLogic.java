@@ -32,9 +32,10 @@ public class PartidoLogic {
 	{
 		dPartido.update(p);
 	}
-
-
-
+	public void reprogramarPartido(Partido partidoNuevo, Partido partidoAReprogramar)
+	{
+		dPartido.reprogramarPartido(partidoNuevo, partidoAReprogramar);
+	}
 }
 
 

@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import data.DataArbitro;
 import entities.Arbitro;
+import entities.Partido;
 
 public class ArbitroLogic {
 	private DataArbitro dArbitro;
@@ -30,5 +31,8 @@ public class ArbitroLogic {
 	{
 		dArbitro.update(a);
 	}
-
+	public LinkedList<Arbitro> getArbitrosDisp(Partido partido)
+	{
+		return dArbitro.getArbitrosDisp(partido);
+	}
 }

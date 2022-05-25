@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.util.LinkedList;
 
 import entities.Cancha;
+import entities.Partido;
 
 public class DataCancha {
 		public LinkedList<Cancha> getAll(){	
@@ -54,7 +55,7 @@ public class DataCancha {
 				}
 			}
 		return cancha;
-			}
+		}
 		public void add (Cancha c) {  
 				String addStatement="insert into cancha(numCancha,nombre) values (?,?)";	    		
 		        try(PreparedStatement ps=DbConnector.getInstancia().getConn().prepareStatement(addStatement);) {
@@ -71,7 +72,7 @@ public class DataCancha {
 						e2.printStackTrace();
 					}
 				}
-			}		
+		}		
 		public void delete(Cancha c) {
 				String deleteStatement="update cancha ca set ca.fecha_baja=CURRENT_DATE where ca.numCancha not in(select distinct ca.numCancha from partido pa inner join cancha ca on ca.numCancha=pa.numCancha WHERE PA.fecha>= CURRENT_DATE and ca.numCancha=?) and ca.numCancha=?";		    	
 			    try(PreparedStatement ps= DbConnector.getInstancia().getConn().prepareStatement(deleteStatement);) {
@@ -106,4 +107,30 @@ public class DataCancha {
 				}
 			}
 		}
-		}
+		public LinkedList<Cancha> getCanchasDisp(Partido partido) {
+			String getCanchaDispStatement="select cancha.numCancha,cancha.nombre from cancha WHERE cancha.numCancha not IN (select DISTINCT cancha.numCancha from cancha inner join partido pa on cancha.numCancha= pa.numCancha WHERE PA.fecha=? and pa.hora=?) and cancha.fecha_baja is null;";
+			LinkedList<Cancha>canchasDisp=new LinkedList<>();
+		    try(PreparedStatement ps=DbConnector.getInstancia().getConn().prepareStatement(getCanchaDispStatement);) {
+				ps.setObject(1, partido.getFecha());
+				ps.setObject(2, partido.getHora());
+				try(ResultSet rs=ps.executeQuery();){
+					while (rs.next()) {	
+						Cancha cancha=new Cancha();
+						cancha.setNroCancha(rs.getInt("numCancha"));
+						cancha.setNombre(rs.getString("nombre"));
+						canchasDisp.add(cancha);
+					}	
+				}
+		    } catch (SQLException ex) {
+		        ex.printStackTrace();
+		    }
+		    finally {
+				try {	
+					DbConnector.getInstancia().releaseConn();				
+				} catch (Exception e2) {
+					e2.printStackTrace();
+				}
+			}
+		return canchasDisp;
+		}		
+	}

@@ -80,24 +80,24 @@ public class DataEquipo {
     		}
 	}	
 	public void delete(Equipo e) { //  baja logica/soft delete
-		String updateEnetrenadorDependency=/*"update entrenador ent "
-				+ "inner join equipo eq on eq.id=ent.idEquipo"
+		String updateEnetrenadorDependency=/*"update entrenador ent"
+				+ " inner join equipo eq on eq.id=ent.idEquipo"
 				+ " set ent.idEquipo=null"
-				+ "where ent.idEquipo=? and eq.fecha_baja is not null"*/"update entrenador ent inner join equipo eq on eq.id=ent.idEquipo set ent.idEquipo=null where ent.idEquipo=? and eq.fecha_baja is not null";
+				+ " where ent.idEquipo=? and eq.fecha_baja is not null"*/"update entrenador ent inner join equipo eq on eq.id=ent.idEquipo set ent.idEquipo=null where ent.idEquipo=? and eq.fecha_baja is not null";
 		
-		String updateJugadoresDependency=/*"update jugador j "
-				+ "inner join equipo eq on j.idEquipo=eq.id "
-				+ "set j.idEquipo=null "
-				+ "where j.idEquipo=? and eq.fecha_baja is not null"*/"update jugador j inner join equipo eq on j.idEquipo=eq.id set j.idEquipo=null where j.idEquipo=? and eq.fecha_baja is not null";
+		String updateJugadoresDependency=/*"update jugador j"
+				+ " inner join equipo eq on j.idEquipo=eq.id"
+				+ " set j.idEquipo=null"
+				+ " where j.idEquipo=? and eq.fecha_baja is not null"*/"update jugador j inner join equipo eq on j.idEquipo=eq.id set j.idEquipo=null where j.idEquipo=? and eq.fecha_baja is not null";
 		
 		String deleteEquipo=/*"update equipo eq"
-    			+ "set eq.fecha_baja=CURRENT_DATE"
+    			+ " set eq.fecha_baja=CURRENT_DATE"
     			+ " where eq.id not in"
     			+ "	(select distinct eq.id"
     			+ "	from partido pa"
     			+ "	inner join equipo eq on eq.id= pa.idEquipo1 or eq.id= pa.idEquipo1"
     			+ "	WHERE PA.fecha>= CURRENT_DATE and eq.id=?)"
-    			+ "and eq.id=?"*/"update equipo eq set eq.fecha_baja=CURRENT_DATE where eq.id not in (select distinct eq.id from partido pa inner join equipo eq on eq.id= pa.idEquipo1 or eq.id= pa.idEquipo2 WHERE PA.fecha>= CURRENT_DATE and eq.id=?) and eq.id=?";
+    			+ " and eq.id=?"*/"update equipo eq set eq.fecha_baja=CURRENT_DATE where eq.id not in (select distinct eq.id from partido pa inner join equipo eq on eq.id= pa.idEquipo1 or eq.id= pa.idEquipo2 WHERE PA.fecha>= CURRENT_DATE and eq.id=?) and eq.id=?";
 	    try(PreparedStatement psUpdateEntrenador = DbConnector.getInstancia().getConn().prepareStatement(updateEnetrenadorDependency);
 	        PreparedStatement psUpdateJugador = DbConnector.getInstancia().getConn().prepareStatement(updateJugadoresDependency);
 	    	PreparedStatement psDeleteEquipo = DbConnector.getInstancia().getConn().prepareStatement(deleteEquipo))
@@ -155,5 +155,76 @@ public class DataEquipo {
 			e2.printStackTrace();
 		}
 		}
+	}
+	public LinkedList<Equipo> getEquiposDisp(Partido partido){	//busca equipos que no participen en una fecha/hora dada tengan entrenador y 5 jugadores
+		String getEquiDispStatement="select eq.id, eq.razonSocial, eq.localidad,eq.puntaje, eq.difGoles from equipo eq"
+				+ " inner join jugador jug on eq.id=jug.idEquipo"
+				+ " inner join entrenador ent on eq.id=ent.idEquipo"
+				+ " WHERE eq.id not IN"
+				+ " (select DISTINCT eq.id from partido pa"
+				+ " inner join equipo eq on eq.id= pa.idEquipo1 or eq.id= pa.idEquipo2"
+				+ " WHERE PA.fecha=? and pa.hora=?)"
+				+ " and eq.fecha_baja is null"
+				+ " group by eq.id"
+				+ " having count(jug.idEquipo)>=5";
+		LinkedList<Equipo> equipos= new LinkedList<>();	
+		try(PreparedStatement ps = DbConnector.getInstancia().getConn().prepareStatement(getEquiDispStatement);) {	
+			ps.setObject(1,partido.getFecha());
+			ps.setObject(2, partido.getHora());
+			try(ResultSet rs = ps.executeQuery();){
+				while (rs.next()) {
+					Equipo e=new Equipo();
+					e.setIdEquipo(rs.getInt("eq.id"));
+					e.setNombre(rs.getString("eq.razonSocial"));
+					e.setLocalidad(rs.getString("eq.localidad"));
+					e.setPuntaje(rs.getInt("eq.puntaje"));
+					e.setDifGoles(rs.getInt("eq.difGoles"));			
+					equipos.add(e);		
+				}	
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();		
+		} finally {
+			try {
+				DbConnector.getInstancia().releaseConn();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return equipos;
+	}
+	public boolean dispParaReprogramar(Partido partido) {
+		String  dispParaReprogramarStmt="select eq.id from equipo eq"
+				+ " inner join jugador jug on eq.id=jug.idEquipo"
+				+ " inner join entrenador ent on eq.id=ent.idEquipo"
+				+ " WHERE eq.id not IN"
+				+ " (select DISTINCT eq.id from partido pa"
+				+ " inner join equipo eq on eq.id= pa.idEquipo1 or eq.id= pa.idEquipo2"
+				+ " WHERE PA.fecha=? and pa.hora=?)"
+				+ " and eq.fecha_baja is null and eq.id=? or eq.id=?"
+				+ " group by eq.id"
+				+ " having count(jug.idEquipo)>=5";				
+		int contador=0;
+		try(PreparedStatement ps = DbConnector.getInstancia().getConn().prepareStatement(dispParaReprogramarStmt);) {	
+			ps.setObject(1,partido.getFecha());
+			ps.setObject(2, partido.getHora());
+			ps.setInt(3, partido.getEquipo1().getIdEquipo());
+			ps.setInt(4, partido.getEquipo2().getIdEquipo());
+			try(ResultSet rs = ps.executeQuery();){
+				while (rs.next()) {
+					contador++;		
+				}	
+			}			
+		} catch (SQLException e) {
+			e.printStackTrace();		
+		} finally {
+			try {
+				DbConnector.getInstancia().releaseConn();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return (contador==2)?true:false;
 	}
 }

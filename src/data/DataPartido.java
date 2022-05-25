@@ -111,7 +111,7 @@ public class DataPartido {
 		return partido;
 	}
 	public void update(Partido p) {
-		String updateStatement="update partido set resultado = ?, incidencias=?, idEquipo1 =?, idEquipo2=?, dniArbitro=? where  fecha=? and hora =? and numCancha= ?" ;
+		String updateStatement="update partido p set p.resultado = ?, p.incidencias=?, p.idEquipo1 =?, p.idEquipo2=?, p.dniArbitro=? where  p.fecha=? and p.hora =? and p.numCancha= ?" ;
 		try(PreparedStatement ps= DbConnector.getInstancia().getConn().prepareStatement(updateStatement);) { 
 			ps.setString(1, p.getResultado());
 			ps.setString(2, p.getIncidencias());
@@ -120,7 +120,7 @@ public class DataPartido {
 			ps.setString(5, p.getArbitro().getDni());
 			ps.setObject(6, p.getFecha());
 			ps.setObject(7, p.getHora());
-			ps.setInt(9, p.getCancha().getNroCancha());
+			ps.setInt(8, p.getCancha().getNroCancha());
 			ps.executeUpdate();
 		} catch (SQLException ex) {
 			ex.printStackTrace();
@@ -134,7 +134,7 @@ public class DataPartido {
 		}
 	}
 	public void add (Partido p) {	   
-   		String addStatement="insert into partido(fecha,hora,idEquipo1,idEquipo2,numCancha,resultado) values (?,?,?,?,?,?)";
+   		String addStatement="insert into partido(fecha,hora,idEquipo1,idEquipo2,numCancha,resultado,dniArbitro) values (?,?,?,?,?,?,?)";
         try(PreparedStatement ps=DbConnector.getInstancia().getConn().prepareStatement(addStatement);){  		
     		ps.setObject(1, p.getFecha());
     		ps.setObject(2, p.getHora());
@@ -142,6 +142,7 @@ public class DataPartido {
 			ps.setInt(4,p.getEquipo2().getIdEquipo());
 			ps.setInt(5,p.getCancha().getNroCancha());
 			ps.setString(6, p.getResultado());
+			ps.setString(7, p.getArbitro().getDni());
             ps.executeUpdate();          
         } catch (SQLException ex) {
         	ex.printStackTrace();
@@ -171,5 +172,31 @@ public class DataPartido {
 				e2.printStackTrace();
 			}
 		}
-}
+	}
+	public void reprogramarPartido(Partido partidoNuevo, Partido partidoAReprogramar) {
+	    try
+	    {
+	    	DbConnector.getInstancia().getConn().setAutoCommit(false);
+	    	add(partidoNuevo);
+	    	update(partidoAReprogramar);
+	    	DbConnector.getInstancia().getConn().commit();
+	    }     
+	    catch (SQLException ex) 
+	    {
+	            try {
+	              System.err.print("Transaction rolled back");
+	              DbConnector.getInstancia().getConn().rollback();
+	            } catch (SQLException excep) {
+	              ex.printStackTrace();
+	            }
+	    }    
+	    finally {
+    		try {		
+    			 DbConnector.getInstancia().releaseConn();
+    		}
+    		 catch (Exception e2) {
+    			e2.printStackTrace();
+    		}
+    		}
+	}
 }
