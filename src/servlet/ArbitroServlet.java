@@ -19,7 +19,7 @@ import logic.ArbitroLogic;
 @WebServlet("/ArbitroServlet")
 public class ArbitroServlet extends HttpServlet {	
 	String showFormAdd="arbitroFormAdd.jsp";
-	String administrar="arbitroFormAdministrar.jsp";
+	String administrar="arbitroAdministrar.jsp";
 	String showFormEdit="arbitroFormEdit.jsp";
 	private static final long serialVersionUID = 1L;
        

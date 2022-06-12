@@ -1,6 +1,6 @@
-<%@ page import="data.DataEquipo"
-	import="entities.Equipo"
+<%@ page import="data.DataArbitro"
 	import="java.util.LinkedList"
+	import="entities.Arbitro"
 	import="java.util.Iterator"%>
 
 <!DOCTYPE html>
@@ -14,51 +14,52 @@
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="css/main.css">
+  <link rel="stylesheet" type="text/css" href="css/main.css">
 </head>
 
-<body>
- <nav><%@ include file="/Include/Head.html" %></nav>
- <section class="container-fluid">
-    <article>
-      <h1 class="text-white text-center mt-4">Lista Equipos</h1>
-      <form action="EquipoServlet" method=get>
+<body>  
+  <nav><%@ include file="/Include/Head.html" %></nav>
+  <section class="container-fluid">
+    <article>   
+      <h1 class="text-white text-center mt-4">Lista Arbitros</h1>
+      <form action="ArbitroServlet" method=get>
         <button type="submit" class="btn btn-primary" name="accion" value="formAdd">Agregar</button>
       </form>
-      <span style="color: red;"><%request.getAttribute("msg");%></span> 
-      <table id="tableEquipo" class="table table-dark table-hover">
+      <table id="tableArbitro" class="table table-dark table-hover">
         <thead>
           <tr>
-            <th>Id Equipo</th>
-            <th>Nombre Equipo</th>
-            <th>Localidad</th>
+            <th>Dni</th>
+            <th>Nombre </th>
+            <th>Apellido</th>
+            <th>Fecha nacimiento</th>
             <th></th>
           </tr>
-        </thead>
-        <tbody>
+        </thead>    
+        <tbody> 
           <%
-          LinkedList<Equipo>list= (LinkedList<Equipo>)request.getAttribute("listEquipos");
-          for(Equipo listE : list) {		
+          LinkedList<Arbitro>list= (LinkedList<Arbitro>)request.getAttribute("listArbitros");
+          for(Arbitro listA : list) {	
           %>
           <tr>
-            <th><%=listE.getIdEquipo()%></th>
-            <th><%=listE.getNombre() %></th>
-            <th><%=listE.getLocalidad() %></th>
+            <th><%=listA.getDni()%></th>
+            <th><%=listA.getNombre()%></th>
+            <th><%=listA.getApellido()%></th>
+            <th><%=listA.getFecha_nacimiento()%></th>
             <th>
-              <form action="EquipoServlet" method=get style="display: inline-block;">
-                <input type="hidden" name="idEquipo" class="form-control" value="<%=listE.getIdEquipo()%>">	
+              <form action="ArbitroServlet" method=get style="display: inline-block;">
+                <input type="hidden" name="dni" class="form-control" value="<%=listA.getDni()%>">	
                 <button type="submit" class="btn btn-primary" name="accion" value="formEdit">Editar</button>
               </form>
-              <form action="EquipoServlet" method=post style="display: inline-block;">
-                <input type="hidden" name="idEquipo" class="form-control" value="<%=listE.getIdEquipo()%>">	
+              <form action="ArbitroServlet" method=post style="display: inline-block;"> 
+                <input type="hidden" name="dni" class="form-control" value="<%=listA.getDni()%>">
                 <button type="submit" class="btn btn-primary" name="accion" value="delete">Eliminar</button>
               </form>
             </th>
           </tr> 
           <%}%>
-        </tbody>    
+        </tbody>       
       </table>
-    </article>    
+    </article>
  </section>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"

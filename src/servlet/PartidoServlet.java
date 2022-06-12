@@ -323,7 +323,6 @@ public class PartidoServlet extends HttpServlet {
 	}
 	private void addOReprogramacion(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
 		Partido partido=(Partido)request.getSession().getAttribute("partido");
-		System.out.println(partido);
 		if(partido.getResultado()=="Reprogramado") // verifica si estoy haciendo una reprogramacion o un add nuevo
 			preparaPartidoReprogramar(request,response);
 		preparaPartidoAdd(request,response);
