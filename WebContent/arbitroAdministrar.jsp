@@ -1,4 +1,4 @@
-<%@ page import="data.DataArbitro"
+<%@ page 
 	import="java.util.LinkedList"
 	import="entities.Arbitro"
 	import="java.util.Iterator"%>
