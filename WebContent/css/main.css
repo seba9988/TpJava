@@ -1,4 +1,9 @@
 
 :root {
     --bs-body-bg: #303030;
+    
+}
+.btn-outline-dark {
+    color:#fffffe;
+    border-color:#4b63e9;
 }

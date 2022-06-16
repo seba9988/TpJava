@@ -20,14 +20,14 @@
 
 <body>
  <nav><%@ include file="/Include/Head.html" %></nav>
- <section class="container-fluid">
-    <article>
+ <section class="container">
+    <article >
       <h1 class="text-white text-center mt-4">Lista Equipos</h1>
       <form action="EquipoServlet" method=get >
-        <button type="submit" class="btn btn-primary" name="accion" value="formAdd"><i class="bi bi-plus-circle"></i> Agregar Equipo</i></button>
+        <button type="submit" class="btn btn-success float-end" name="accion" value="formAdd"><i class="bi bi-plus-circle"></i> Agregar Equipo</i></button>
       </form>
       <span style="color: red;"><%request.getAttribute("msg");%></span> 
-      <table id="tableEquipo" class="table table-dark table-hover">
+      <table id="tableEquipo" class="table table-dark table-hover ">
         <thead>
           <tr>
             <th>Id Equipo</th>
@@ -48,11 +48,11 @@
             <th>
               <form action="EquipoServlet" method=get style="display: inline-block;">
                 <input type="hidden" name="idEquipo" class="form-control" value="<%=listE.getIdEquipo()%>">	
-                <button type="submit" class="btn btn-primary" name="accion" value="formEdit"><i class="bi bi-pencil-fill"></i></button>
+                <button type="submit" class="btn btn-outline-primary" name="accion" value="formEdit"><i class="bi bi-pencil-fill"></i></button>
               </form>
               <form action="EquipoServlet" method=post style="display: inline-block;">
                 <input type="hidden" name="idEquipo" class="form-control" value="<%=listE.getIdEquipo()%>">	
-                <button type="submit" class="btn btn-danger" name="accion" value="delete"><i class="bi bi-trash-fill"></i></button>
+                <button type="submit" class="btn btn-outline-danger" name="accion" value="delete"><i class="bi bi-trash-fill"></i></button>
               </form>
             </th>
           </tr> 
