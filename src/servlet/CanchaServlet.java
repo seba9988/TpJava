@@ -122,7 +122,6 @@ public class CanchaServlet extends HttpServlet {
 	private void addCancha(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Cancha cancha= new Cancha();
 		CanchaLogic canchaL= new CanchaLogic();
-		cancha.setNroCancha(Integer.parseInt(request.getParameter("NumC")));
 		cancha.setNombre(request.getParameter("nombre"));
 		canchaL.add(cancha);
 		listCanchas(request, response);	

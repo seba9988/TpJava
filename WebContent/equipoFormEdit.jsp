@@ -1,7 +1,9 @@
 
 <%@ page language="java" import="java.util.*,java.sql.*"
 	import="entities.Equipo"
-	import="java.util.Iterator"%>
+	import="entities.Entrenador"
+	import="java.util.Iterator"
+	import="logic.EntrenadorLogic"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -56,6 +58,21 @@
           <div class="offset-sm-1 col-sm-10">
             <button type="submit" class="btn btn-primary" name="accion" value="update"> Modificar</button>
           </div>       
+        </div>
+                <div class="row mt-3">
+          <label for="entrenador" class="col-form-label col-sm-2">Entrenador: </label>
+          <div class="col-sm-2">
+      
+
+     <select class="form-select" aria-label="Default select example" name="EntrenadorDni">
+         <%
+        LinkedList<Entrenador>listaE=(LinkedList<Entrenador>)request.getAttribute("listEntreDisp");
+            for(Entrenador entrenador : listaE) {
+     %> 
+        <option selected value="<%=entrenador.getDni()%>"><%=entrenador.getApellido()%></option>
+    <%}%>
+      </select>
+          </div>
         </div>
       </form>
     </div>

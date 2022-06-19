@@ -28,12 +28,6 @@
       
       %></p>
       <form action="EquipoServlet" method=post>
-      	<div class="row mt-3">
-          <label for="id" class="col-form-label col-sm-2">Id Equipo: </label>
-          <div class="col-sm-8">
-            <input type="number" name="id" class="form-control" required>
-          </div>
-        </div>
         <div class="row mt-3">
           <label for="nombre" class="col-form-label col-sm-2">Nombre Equipo: </label>
           <div class="col-sm-8">
@@ -59,7 +53,7 @@
           </div>
         </div>
         <div class="row mt-3">
-          <label for="difGol" class="col-form-label col-sm-2">Entrenador: </label>
+          <label for="entrenador" class="col-form-label col-sm-2">Entrenador: </label>
           <div class="col-sm-2">
       
 
@@ -68,13 +62,12 @@
         LinkedList<Entrenador>listaE=(LinkedList<Entrenador>)request.getAttribute("listEntreDisp");
             for(Entrenador e : listaE) {
      %> 
-        <option selected value="<%=e.getDni()%>"><%=e.getNombre()%></option>
-
+        <option selected value="<%=e.getDni()%>"><%=e.getApellido()%></option>
     <%}%>
       </select>
           </div>
         </div>
-         
+ 
         <div class="row mt-3 mb-3">
           <div class="offset-sm-1 col-sm-10">
             <button type="submit" class="btn btn-primary" name="accion" value="add"> Cargar</button>

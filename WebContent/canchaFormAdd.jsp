@@ -21,12 +21,6 @@
     <div class="container border text-center">
       <p class="h1">Cargar Datos del Cancha</p>
       <form action="CanchaServlet" method=post>
-      	<div class="row mt-3">
-          <label for="numC" class="col-form-label col-sm-2">Numero Cancha: </label>
-          <div class="col-sm-8">
-            <input type="number" name="NumC" class="form-control" required>
-          </div>
-        </div>
         <div class="row mt-3">
           <label for="nombre" class="col-form-label col-sm-2">Nombre Cancha: </label>
           <div class="col-sm-8">

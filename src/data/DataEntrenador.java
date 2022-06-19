@@ -55,10 +55,10 @@ public class DataEntrenador {
 				ps.setString(1, e.getDni());
 				try(ResultSet rs=ps.executeQuery();){
 		        while (rs.next()) {	
-					entrenador.setDni(rs.getString("dniEntrenador"));
-					entrenador.setNombre(rs.getString("nombre"));
-					entrenador.setApellido(rs.getString("apellido"));
-					entrenador.setFecha_nacimiento(rs.getObject("fechaNac",LocalDate.class));
+					entrenador.setDni(rs.getString("ent.dniEntrenador"));
+					entrenador.setNombre(rs.getString("ent.nombre"));
+					entrenador.setApellido(rs.getString("ent.apellido"));
+					entrenador.setFecha_nacimiento(rs.getObject("ent.fechaNac",LocalDate.class));
 					equipo.setIdEquipo(rs.getInt("eq.id"));
 					equipo.setNombre(rs.getString("eq.razonSocial"));
 					equipo.setLocalidad(rs.getString("eq.localidad"));
@@ -115,12 +115,16 @@ public class DataEntrenador {
 				}	
 		}
 		public void update (Entrenador e) {		
-			String updateStatement="update entrenador ent set ent.nombre=?, ent.apellido=?, ent.fechaNac=? where ent.dniEntrenador=?";			
+			String updateStatement="update entrenador ent set ent.nombre=?, ent.apellido=?, ent.fechaNac=?, ent.idEquipo=? where ent.dniEntrenador=?";
+			Integer idEquipo=null;
 		    try(PreparedStatement ps=DbConnector.getInstancia().getConn().prepareStatement(updateStatement);) {
 				ps.setString(1, e.getNombre());
 				ps.setString(2,e.getApellido());
 				ps.setObject(3,e.getFecha_nacimiento());
-				ps.setString(4, e.getDni());
+				if(e.getEquipo()!=null)
+					{idEquipo= e.getEquipo().getIdEquipo();}
+				ps.setObject(4,idEquipo);
+				ps.setString(5, e.getDni());
 		        ps.executeUpdate();   
 		    } catch (SQLException ex) {
 		        ex.printStackTrace();
@@ -135,8 +139,11 @@ public class DataEntrenador {
 		}
 		public LinkedList<Entrenador> getEntrenadoresDisp() /* lista de entrenadores sin equipo*/ {	
 			String getEntrenadoresDispStmt="Select ent.dniEntrenador,ent.nombre,ent.apellido,ent.fechaNac"
-					+ " from entrenador ent where ent.idEquipo IS NULL";		
-			LinkedList<Entrenador> entrenadores= new LinkedList<>();			
+					+ " from entrenador ent where ent.idEquipo IS NULL";
+			Entrenador entrenadorVacio=new Entrenador(); // creo un entrenador vacio para agregar a la lista, este tiene la funcion de dar la opcion de no elegir ningun entrenador y evitar errores cuando el arreglo esta vacio 
+			entrenadorVacio.setApellido("--Ninguno--"); 
+			LinkedList<Entrenador> entrenadores= new LinkedList<>();	
+			entrenadores.add(entrenadorVacio);
 			try(Statement stm = DbConnector.getInstancia().getConn().createStatement();
 				ResultSet rs = stm.executeQuery(getEntrenadoresDispStmt);) {		
 			while (rs.next()) {
@@ -152,12 +159,37 @@ public class DataEntrenador {
 			} finally {
 				try {
 					DbConnector.getInstancia().releaseConn();
+			} catch (Exception e2) {e2.printStackTrace();}
+			}
+			for (Entrenador entrenador : entrenadores) {
+				System.out.println(entrenador.getApellido());
+			}
+		return entrenadores;	
+		}
+		public Entrenador getEntrenadorDeUnEquipo(Equipo equipo) throws SQLException {
+			String getEntrenadorDeUnEquipoStmt="select ent.dniEntrenador, ent.nombre,ent.apellido,ent.fechaNac"
+					+ " from entrenador ent inner join equipo eq on eq.idEquipo=ent.idEquipo";
+			Entrenador entrenador=new Entrenador();
+			try(PreparedStatement ps=DbConnector.getInstancia().getConn().prepareStatement(getEntrenadorDeUnEquipoStmt);){
+				ps.setInt(1, equipo.getIdEquipo());
+				try(ResultSet rs=ps.executeQuery();){
+					entrenador.setDni(rs.getString("ent.dniEntrenador"));
+					entrenador.setNombre(rs.getString("ent.nombre"));
+					entrenador.setApellido(rs.getString("ent.apellido"));
+					entrenador.setFecha_nacimiento(rs.getObject("ent.fechaNac",LocalDate.class));
+				}
+			}	catch (SQLException e) {
+				e.printStackTrace();
+			}
+			finally {
+				try {
+					DbConnector.getInstancia().releaseConn();
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}
-		}
-		return entrenadores;	
-		}
+				}
+			return entrenador;
+			}
 		/*	public void deleteDependency(Equipo equipo)
 		{
 			Conexion conexion = new Conexion();

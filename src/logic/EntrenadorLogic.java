@@ -1,8 +1,10 @@
 package logic;
+import java.sql.SQLException;
 import java.util.LinkedList;
 
 import data.DataEntrenador;
 import entities.Entrenador;
+import entities.Equipo;
 
 public class EntrenadorLogic {
 	private DataEntrenador dEntrenador;
@@ -34,6 +36,9 @@ public class EntrenadorLogic {
 	public LinkedList<Entrenador> getEntrenadoresDisp()
 	{
 		return dEntrenador.getEntrenadoresDisp();
+	}
+	public Entrenador getEntrenadorDeUnEquipo(Equipo equipo) throws SQLException {
+		return dEntrenador.getEntrenadorDeUnEquipo(equipo);
 	}
 	/*public void deleteDependency(Equipo equipo)          
 	{

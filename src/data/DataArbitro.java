@@ -93,7 +93,6 @@ public class DataArbitro {
 	}
 	public void update (Arbitro a) {		   
 		String updateStatement="update arbitro set nombre=?, apellido=?, fechaNac=? where dniArbitro=?";	
-		System.out.println(a);
 	    try(PreparedStatement ps=DbConnector.getInstancia().getConn().prepareStatement(updateStatement)) {
 			ps.setString(1, a.getNombre());
 			ps.setString(2,a.getApellido());

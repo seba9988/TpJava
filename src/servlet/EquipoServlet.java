@@ -124,26 +124,21 @@ private void listEquipos(HttpServletRequest request, HttpServletResponse respons
 private void listEntreDisp(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { // lista de entrenadores que no tengan equipo
 	EntrenadorLogic entrenadorL= new EntrenadorLogic();
 	LinkedList <Entrenador>listEntrenadores=entrenadorL.getEntrenadoresDisp();
-	request.setAttribute("listEntreDisp", listEntrenadores); // muestra los partidos que no tengan resultado
+	request.setAttribute("listEntreDisp", listEntrenadores); 
 	request.getRequestDispatcher(showFormAdd).forward(request, response);
-}
+	}
 private void addEquipo(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException { // deberia hacer un metodo updateDependency enentrenador para evitar el getOne?
 	Equipo equipo = new Equipo();
-	Entrenador entrenadorAbuscar= new Entrenador();	
-	entrenadorAbuscar.setDni(request.getParameter("EntrenadorDni")); // comprobar si es nulo
-	EntrenadorLogic entrenadorL=new EntrenadorLogic();	
+	Entrenador entrenador= new Entrenador();
 	EquipoLogic equipoL= new EquipoLogic();
-	Entrenador entrenador=entrenadorL.getOne(entrenadorAbuscar);
-	equipo.setIdEquipo(Integer.parseInt(request.getParameter("id"))); // comrpobar si es nulo, podria guardarlo previamente en un wrapper Integar y ver si ese wrapper Integer es nulo
+	entrenador.setDni(request.getParameter("EntrenadorDni")); // comprobar si es nulo
 	equipo.setNombre(request.getParameter("nombre"));
 	equipo.setLocalidad(request.getParameter("localidad"));
 	equipo.setPuntaje(Integer.parseInt(request.getParameter("puntaje"))); // mismo que id
-	equipo.setDifGoles(Integer.parseInt( request.getParameter("difGol"))); // mismo que id
-	entrenador.setEquipo(equipo);	//Al entrenador le agrego el equipo al que ahora pertenece				
-	equipoL.add(equipo);
-	entrenadorL.update(entrenador);
+	equipo.setDifGoles(Integer.parseInt( request.getParameter("difGol"))); // mismo que id			
+	equipoL.add(equipo,entrenador); // se hace add de equipo y update de entrenador si es que se eligio alguno
 	listEquipos(request, response);			
-}
+	}
 private void updateEquipo(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
 	Equipo equipo = new Equipo();
 	EquipoLogic equipoL=new EquipoLogic();
@@ -154,20 +149,27 @@ private void updateEquipo(HttpServletRequest request, HttpServletResponse respon
 	equipo.setDifGoles(Integer.parseInt( request.getParameter("difGol")));
 	equipoL.update(equipo);			
 	listEquipos(request, response);
-}
+	}
 private void eliminarEquipo(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException { //falta verificar que el equipo no este por jugar un partido antes de ser borradom en dicho caso cancelar la aliminacion hasta que juegue todos sus partidos
 	Equipo equipo = new Equipo();
 	EquipoLogic equipoL=new EquipoLogic();
 	equipo.setIdEquipo(Integer.parseInt(request.getParameter("idEquipo")));	
 	equipoL.delete(equipo);	 // una vez borradas las dependencias borro el equipo si no tiene partidos sin jugar
 	listEquipos(request, response);
-}
-private void preparaEquipoEdit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	}
+private void preparaEquipoEdit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
 	Equipo equipo=new Equipo();
-	equipo.setIdEquipo(Integer.parseInt(request.getParameter("idEquipo")));
 	EquipoLogic equipoL= new EquipoLogic();
+	EntrenadorLogic entrenadorL= new EntrenadorLogic();
+	Entrenador entrenadorDelEquipo=new Entrenador();
+	LinkedList <Entrenador>listEntrenadores=entrenadorL.getEntrenadoresDisp();
+	equipo.setIdEquipo(Integer.parseInt(request.getParameter("idEquipo")));
 	equipo=equipoL.getOne(equipo);
+	entrenadorDelEquipo=entrenadorL.getEntrenadorDeUnEquipo(equipo);
+	if((entrenadorDelEquipo.getDni()!=null)) // busco si un equipo tiene entrenador, si lo tiene lo agrego al listado
+		listEntrenadores.add(entrenadorDelEquipo);
+	request.setAttribute("listEntreDisp", listEntrenadores); 
 	request.setAttribute("equipo", equipo);
 	request.getRequestDispatcher(showFormEdit).forward(request, response);
-}
+	}
 }

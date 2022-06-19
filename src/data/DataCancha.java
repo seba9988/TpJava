@@ -57,10 +57,9 @@ public class DataCancha {
 		return cancha;
 		}
 		public void add (Cancha c) {  
-				String addStatement="insert into cancha(numCancha,nombre) values (?,?)";	    		
+				String addStatement="insert into cancha(nombre) values (?)";	    		
 		        try(PreparedStatement ps=DbConnector.getInstancia().getConn().prepareStatement(addStatement);) {
-		    		ps.setInt(1, c.getNroCancha());
-		    		ps.setString(2, c.getNombre());     
+		    		ps.setString(1, c.getNombre());     
 		            ps.executeUpdate();          
 		        } catch (SQLException ex) {
 		        	ex.printStackTrace();
