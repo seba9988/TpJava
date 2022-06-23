@@ -3,6 +3,7 @@ public class Cancha {
 				
 			private int nroCancha;
 			private String nombre;
+			
 			public int getNroCancha() {
 				return nroCancha;
 			}

@@ -161,9 +161,6 @@ public class DataEntrenador {
 					DbConnector.getInstancia().releaseConn();
 			} catch (Exception e2) {e2.printStackTrace();}
 			}
-			for (Entrenador entrenador : entrenadores) {
-				System.out.println(entrenador.getApellido());
-			}
 		return entrenadores;	
 		}
 		public Entrenador getEntrenadorDeUnEquipo(Equipo equipo) throws SQLException {

@@ -3,6 +3,7 @@ package entities;
 import java.time.format.DateTimeFormatter;
 
 public class Entrenador extends Persona {
+	
 		private Equipo equipo;
 		private String dateFormat = "dd/MM/yyyy";
 		

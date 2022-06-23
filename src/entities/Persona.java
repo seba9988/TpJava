@@ -3,6 +3,7 @@ package entities;
 import java.time.LocalDate;
 
 public class Persona {
+	
 	protected String dni;
 	protected String nombre;
 	protected String apellido;

@@ -2,9 +2,10 @@ package entities;
 
 
 public class Equipo {
+	
 	private Integer idEquipo;
 	private String nombre;
-	private String Localidad;
+	private String localidad;
 	private int puntaje;
 	private int difGoles;
 	public Integer getIdEquipo() {
@@ -18,14 +19,13 @@ public class Equipo {
 	}
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
-	}
+	}	
 	public String getLocalidad() {
-		return Localidad;
+		return localidad;
 	}
 	public void setLocalidad(String localidad) {
-		Localidad = localidad;
+		this.localidad = localidad;
 	}
-	
 	public int getPuntaje() {
 		return puntaje;
 	}
@@ -40,8 +40,7 @@ public class Equipo {
 	}
 	@Override
 	public String toString() {
-		return "Equipo [idEquipo=" + idEquipo + ", nombre=" + nombre + ", Localidad=" + Localidad + ", puntaje=" + puntaje + ", difGoles=" + difGoles + "]";
-		
+		return "Equipo [idEquipo=" + idEquipo + ", nombre=" + nombre + ", Localidad=" + localidad + ", puntaje=" + puntaje + ", difGoles=" + difGoles + "]";		
 	}
 	
 	
