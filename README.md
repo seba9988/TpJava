@@ -30,4 +30,4 @@ Aprobación directa
 | Listado Complejo | Filtro por posicion de jugador - Listar Máximos asistentes, goleadores - Jugadores sancionados        |
 | Nivel de acceso  | Usuario - Administrador                |
 
-[Contribution guidelines for this project](imgs/javaLigaFutbol.png)
+![](imgs/javaLigaFutbol.png)
