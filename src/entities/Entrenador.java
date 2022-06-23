@@ -18,6 +18,6 @@ public class Entrenador extends Persona {
 		public String toString() {
 			DateTimeFormatter dFormat = DateTimeFormatter.ofPattern(dateFormat);
 			return "Entrenador [dni=" + dni + ", nombre=" + nombre + ", apellido=" + apellido + ", fecha_nacimiento="
-					+ (fecha_nacimiento==null?null:fecha_nacimiento.format(dFormat)) + "]\n";
+					+ (fechaNacimiento==null?null:fechaNacimiento.format(dFormat)) + "]\n";
 		}		
 }

@@ -60,7 +60,7 @@ public class Jugador extends Persona {
 	public String toString() {
 		DateTimeFormatter dFormat = DateTimeFormatter.ofPattern(dateFormat);
 		return "Jugador [dni=" + dni + ", nombre=" + nombre + ", apellido=" + apellido + ", fecha_nacimiento="
-				+ (fecha_nacimiento==null?null:fecha_nacimiento.format(dFormat)) + ", posicion=" + posicion + ", goles=" + goles + ", asistencias=" + asistencias
+				+ (fechaNacimiento==null?null:fechaNacimiento.format(dFormat)) + ", posicion=" + posicion + ", goles=" + goles + ", asistencias=" + asistencias
 				+ ", partidosJugados=" + partidosJugados + ", tarjetasA=" + tarjetasA + ", tarjetasR=" + tarjetasR
 				+", Equipo "+ "]";
 	}
