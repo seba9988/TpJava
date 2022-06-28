@@ -1,7 +1,7 @@
 
-<%@ page language="java" import="java.util.*,java.sql.*"
-						 import="entities.Entrenador"
-	%>
+<%@ page language="java"
+ import="java.util.*,java.sql.*"
+ import="entities.Entrenador"%>
 <!DOCTYPE html>
 <html lang="en">
 

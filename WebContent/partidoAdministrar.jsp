@@ -1,12 +1,6 @@
-<%@ page
-	import="java.util.LinkedList"
-	import="entities.Partido"
-	import="entities.Equipo"
-	import="java.util.Iterator"%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -17,9 +11,6 @@
     integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="css/main.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
-  <%
-  LinkedList<Partido>listP=(LinkedList<Partido>)request.getAttribute("listPartidos");
-  %>
 </head>
 <body>
   <nav><%@ include file="/Include/Head.html"%></nav>
@@ -42,38 +33,36 @@
           </tr> 
         </thead>
         <tbody>
-          <%
-          for(Partido P : listP) {	
-          %>
+         <c:forEach items="${listPartidos}" var="partido">
           <tr>
-            <th><%=P.getFecha()%></th>
-            <th><%=P.getHora() %></th>
-            <th><%=P.getResultado() %></th>
-            <th><%=P.getEquipo1().getNombre() %></th>
-            <th><%=P.getEquipo2().getNombre()  %></th>
-            <th><%=P.getCancha().getNroCancha() %></th>
+            <th><c:out value="${partido.fecha}" /></th>
+            <th><c:out value="${partido.hora}" /></th>
+            <th><c:out value="${partido.resultado}" /></th>
+            <th><c:out value="${partido.equipo1.nombre}" /></th>
+            <th><c:out value="${partido.equipo2.nombre}" /></th>
+            <th><c:out value="${partido.cancha.nroCancha}" /></th>
             <th>
               <form action="PartidoServlet" method=get style="display: inline-block;">
-                <input type="hidden" name="Fecha" class="form-control" value="<%=P.getFecha() %>">	
-                <input type="hidden" name="Hora" class="form-control" value="<%=P.getHora() %>">	
-                <input type="hidden" name="nroC" class="form-control" value="<%=P.getCancha().getNroCancha() %>">	
+                <input type="hidden" name="Fecha" class="form-control" value="${partido.fecha}">	
+                <input type="hidden" name="Hora" class="form-control" value="${partido.hora}">	
+                <input type="hidden" name="nroC" class="form-control" value="${partido.cancha.nroCancha}">	
                 <button type="submit" class="btn btn-outline-primary" name="accion" value="formEdit"><i class="bi bi-pencil-fill"></i></button>
               </form>
               <form action="PartidoServlet" method=post style="display: inline-block;">
-                <input type="hidden" name="Fecha" class="form-control" value="<%=P.getFecha() %>">	
-                <input type="hidden" name="Hora" class="form-control" value="<%=P.getHora() %>">	
-                <input type="hidden" name="nroC" class="form-control" value="<%=P.getCancha().getNroCancha() %>">
+                <input type="hidden" name="Fecha" class="form-control" value="${partido.fecha}">	
+                <input type="hidden" name="Hora" class="form-control" value="${partido.hora}">	
+                <input type="hidden" name="nroC" class="form-control" value="${partido.cancha.nroCancha}">
                 <button type="submit" class="btn btn-outline-danger" name="accion" value="delete"><i class="bi bi-trash-fill"></i></button>
               </form>
               <form action="PartidoServlet" method=get style="display: inline-block;">
-                <input type="hidden" name="Fecha" class="form-control" value="<%=P.getFecha() %>">	
-                <input type="hidden" name="Hora" class="form-control" value="<%=P.getHora() %>">	
-                <input type="hidden" name="nroC" class="form-control" value="<%=P.getCancha().getNroCancha() %>">
+                <input type="hidden" name="Fecha" class="form-control" value="${partido.fecha}">	
+                <input type="hidden" name="Hora" class="form-control" value="${partido.hora}">	
+                <input type="hidden" name="nroC" class="form-control" value="${partido.cancha.nroCancha}">
                 <button type="submit" class="btn btn-primary" name="accion" value="formFechaReprogramar">Reprogramar</button>
               </form>
             </th>
           </tr> 
-          <%}%>
+          </c:forEach>
         </tbody>
       </table>
     </article>  

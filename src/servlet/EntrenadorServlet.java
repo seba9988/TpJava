@@ -130,7 +130,7 @@ public class EntrenadorServlet extends HttpServlet {
 		entrenador.setDni(request.getParameter("dni"));	
 		entrenador.setNombre(request.getParameter("nombre"));
 		entrenador.setApellido(request.getParameter("apellido"));
-		entrenador.setFecha_nacimiento(LocalDate.parse(request.getParameter("fechaNac")));
+		entrenador.setFechaNacimiento(LocalDate.parse(request.getParameter("fechaNac")));
 		entrenadorL.add(entrenador);
 		listEntrenadores(request, response);
 	}
@@ -140,7 +140,7 @@ public class EntrenadorServlet extends HttpServlet {
 		entrenador.setDni(request.getParameter("dni"));
 		entrenador.setNombre(request.getParameter("nombre"));
 		entrenador.setApellido(request.getParameter("apellido"));
-		entrenador.setFecha_nacimiento(LocalDate.parse(request.getParameter("fechaNac")));	
+		entrenador.setFechaNacimiento(LocalDate.parse(request.getParameter("fechaNac")));	
 		entrenadorL.update(entrenador);
 		listEntrenadores(request, response);
 	}

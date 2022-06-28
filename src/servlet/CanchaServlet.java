@@ -116,7 +116,7 @@ public class CanchaServlet extends HttpServlet {
 	private void listCanchas(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		CanchaLogic canchaL= new CanchaLogic();
 		LinkedList<Cancha> list = canchaL.getAll();
-		request.setAttribute("listaCancha", list);
+		request.setAttribute("listCanchas", list);
 		request.getRequestDispatcher(administrar).forward(request, response);
 	}
 	private void addCancha(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

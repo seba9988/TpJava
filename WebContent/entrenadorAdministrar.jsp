@@ -1,8 +1,4 @@
-<%@ page import="data.DataEntrenador"
-	import="java.util.LinkedList"
-	import="entities.Entrenador"
-	import="java.util.Iterator"%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -16,9 +12,6 @@
     integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="css/main.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
-  <%
-  LinkedList<Entrenador>list= (LinkedList<Entrenador>)request.getAttribute("listEntrenadores");	
-  %>
 </head>
 <body>
  <nav><%@ include file="/Include/Head.html" %></nav>
@@ -39,26 +32,24 @@
           </tr>
         </thead>
         <tbody>
-          <%
-          for(Entrenador listE : list) {	
-          %>
+          <c:forEach items="${listEntrenadores}" var="entrenador">
           <tr>
-            <th><%=listE.getDni()%></th>
-            <th><%=listE.getNombre()%></th>
-            <th><%=listE.getApellido()%></th>
-            <th><%=listE.getFecha_nacimiento()%></th>
+            <th><c:out value="${entrenador.dni}" /></th>
+            <th><c:out value="${entrenador.nombre}" /></th>
+            <th><c:out value="${entrenador.apellido}" /></th>
+            <th><c:out value="${entrenador.fechaNacimiento}" /></th>
             <th>
               <form action="EntrenadorServlet" method=get style="display: inline-block;">
-                <input type="hidden" name="dni" class="form-control" value="<%=listE.getDni()%>">	
+                <input type="hidden" name="dni" class="form-control" value="${entrenador.dni}">	
                 <button type="submit" class="btn btn-outline-primary" name="accion" value="formEdit"><i class="bi bi-pencil-fill"></i></button>
               </form>
               <form action="EntrenadorServlet" method=post style="display: inline-block;">
-                <input type="hidden" name="dni" class="form-control" value="<%=listE.getDni()%>">	
+                <input type="hidden" name="dni" class="form-control" value="${entrenador.dni}">	
                 <button type="submit" class="btn btn-outline-danger" name="accion" value="delete"><i class="bi bi-trash-fill"></i></button>
               </form>
             </th>
           </tr> 
-          <%}%>
+          </c:forEach>
         </tbody>  
       </table>
     </article>

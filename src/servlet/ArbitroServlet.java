@@ -132,7 +132,7 @@ public class ArbitroServlet extends HttpServlet {
 		arbitro.setDni(request.getParameter("dni"));	
 		arbitro.setNombre(request.getParameter("nombre"));
 		arbitro.setApellido(request.getParameter("apellido"));
-		arbitro.setFecha_nacimiento(LocalDate.parse(request.getParameter("fechaNac")));
+		arbitro.setFechaNacimiento(LocalDate.parse(request.getParameter("fechaNac")));
 		arbitroL.add(arbitro);
 		listArbitros(request, response);
 	}
@@ -142,7 +142,7 @@ public class ArbitroServlet extends HttpServlet {
 		arbitro.setDni(request.getParameter("dni"));
 		arbitro.setNombre(request.getParameter("nombre"));
 		arbitro.setApellido(request.getParameter("apellido"));
-		arbitro.setFecha_nacimiento(LocalDate.parse(request.getParameter("fechaNac")));	
+		arbitro.setFechaNacimiento(LocalDate.parse(request.getParameter("fechaNac")));	
 		arbitroL.update(arbitro);
 		listArbitros(request, response);
 	}

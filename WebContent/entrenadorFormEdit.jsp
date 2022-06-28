@@ -44,7 +44,7 @@
         <div class="row mt-3">
           <label for="fechaNac" class="col-form-label col-sm-2">Fecha Nacimiento: </label>
           <div class="col-sm-8">
-            <input type="date" name="fechaNac" class="form-control" Value="<%=e.getFecha_nacimiento()%>" required>
+            <input type="date" name="fechaNac" class="form-control" Value="<%=e.getFechaNacimiento()%>" required>
           </div>
         </div>
         <div class="row mt-3 mb-3">

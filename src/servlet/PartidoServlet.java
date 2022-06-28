@@ -39,7 +39,6 @@ public class PartidoServlet extends HttpServlet {
 		case "formAdd": // muestro jsp para rellenar datos del nuevo jugador
 			try
 			{	
-				System.out.println("addOReprogramacion");
 				addOReprogramacion(request, response);
 			}
 			catch(Exception e)
@@ -221,7 +220,6 @@ public class PartidoServlet extends HttpServlet {
 		request.getRequestDispatcher(showFormAdd).forward(request, response);
 	}
 	private void addPartido(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("addPartido principio");
 		Partido partido=(Partido)request.getSession().getAttribute("partido");
 		Equipo equipo1 =new Equipo();
 		Equipo equipo2 =new Equipo();
@@ -230,7 +228,6 @@ public class PartidoServlet extends HttpServlet {
 		PartidoLogic partidoL=new PartidoLogic();
 		if(request.getParameter("equipoId1")!=request.getParameter("equipoId2"))
 		{	
-			System.out.println("addPartido dentro del if");
 			cancha.setNroCancha(Integer.parseInt(request.getParameter("nroC")));
 			equipo1.setIdEquipo(Integer.parseInt(request.getParameter("equipoId1")));
 			equipo2.setIdEquipo(Integer.parseInt(request.getParameter("equipoId2")));
@@ -238,8 +235,7 @@ public class PartidoServlet extends HttpServlet {
 			partido.setCancha(cancha);
 			partido.setEquipo1(equipo1);
 			partido.setEquipo2(equipo2);
-			partido.setArbitro(arbitro);
-			System.out.println("addPartido antes de hacer adds");		
+			partido.setArbitro(arbitro);	
 			partidoL.add(partido);		
 		}
 		request.getSession().removeAttribute("partido");
@@ -272,50 +268,40 @@ public class PartidoServlet extends HttpServlet {
 		partido.setCancha(cancha);
 		partido=partidoL.getOne(partido);
 		partido.setResultado("Reprogramado");
-		System.out.println("antes de setear partido en sesion");
-		System.out.println(partido);
 		request.getSession().setAttribute("partido", partido);
 		request.getRequestDispatcher(showFormFecha).forward(request, response);	
 	}
 	private void preparaPartidoReprogramar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("dentro de prepara PartidoReprograma");
 		CanchaLogic canchaL=new CanchaLogic();
 		ArbitroLogic arbitroL=new ArbitroLogic();
 		EquipoLogic equipoL=new EquipoLogic();
 		Partido partidoViejo=(Partido)request.getSession().getAttribute("partido");
 		Partido partidoNuevo= new Partido();
-		System.out.println("dentro de prepara antes de asignacion");
 		partidoNuevo.setFecha(LocalDate.parse(request.getParameter("Fecha")));
 		partidoNuevo.setHora(LocalTime.parse(request.getParameter("Hora")));
 		partidoNuevo.setEquipo1(partidoViejo.getEquipo1());
 		partidoNuevo.setEquipo2(partidoViejo.getEquipo2());
-		System.out.println("dentro de prepara antes de if");
 		if(equipoL.dispParaReprogramar(partidoNuevo)) { // verifico si  equipo1 y equipo2 estan disponibles en la fecha/hora ingresada
 			LinkedList<Cancha>canchasDisp=canchaL.getCanchasDisp(partidoNuevo); //lista de canchas que no esten ocupadas en la fecha/hora ingresada
 			LinkedList<Arbitro>arbitrosDisp=arbitroL.getArbitrosDisp(partidoNuevo);// lista de arbitros  que no estan ocupadoes en la fecha/hora ingresada
 			request.setAttribute("listcanchas",canchasDisp);
 			request.setAttribute("listArbitros",arbitrosDisp);	
 			request.getSession().setAttribute("PartidoNuevo", partidoNuevo); // fecha y hora pretendida para la reprogramacion
-			System.out.println("dentro de prepara antes de showFormAdd");
 			request.getRequestDispatcher(showFormReprog).forward(request, response);
+			return;
 		}
 		listPartidos(request, response);
 	}
 	private void partidoReprogramar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("dentro de PartidoReprogramar");
 		PartidoLogic  partidoL=new PartidoLogic();
 		Cancha cancha= new Cancha();
 		Partido partidoAReprogramar=(Partido)request.getSession().getAttribute("partido");
-		System.out.println(partidoAReprogramar);
 		Partido partidoNuevo= (Partido)request.getSession().getAttribute("PartidoNuevo");
 		Arbitro arbitro=new Arbitro();
 		cancha.setNroCancha(Integer.parseInt(request.getParameter("nroC")));
 		arbitro.setDni(request.getParameter("arbitroDni"));
 		partidoNuevo.setCancha(cancha);
 		partidoNuevo.setArbitro(arbitro);
-		System.out.println("dentro de PartidoReprogramar antes de hacer la transaccion");
-		System.out.println(partidoAReprogramar);
-		System.out.println(partidoNuevo);
 		partidoL.reprogramarPartido(partidoNuevo,partidoAReprogramar);
 		request.getSession().removeAttribute("partido");
 		request.getSession().removeAttribute("PartidoNuevo");
@@ -324,7 +310,8 @@ public class PartidoServlet extends HttpServlet {
 	private void addOReprogramacion(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
 		Partido partido=(Partido)request.getSession().getAttribute("partido");
 		if(partido.getResultado()=="Reprogramado") // verifica si estoy haciendo una reprogramacion o un add nuevo
-			preparaPartidoReprogramar(request,response);
+			{preparaPartidoReprogramar(request,response);
+			return;}
 		preparaPartidoAdd(request,response);
 	}
 }

@@ -42,7 +42,7 @@ public class DataPartido {
 				arbitro.setDni(rs.getString("arb.dniArbitro"));
 				arbitro.setNombre(rs.getString("arb.nombre"));
 				arbitro.setApellido(rs.getString("arb.apellido"));
-				arbitro.setFecha_nacimiento(rs.getObject("arb.fechaNac",LocalDate.class));
+				arbitro.setFechaNacimiento(rs.getObject("arb.fechaNac",LocalDate.class));
 				partido.setEquipo1(equipo1);
 				partido.setEquipo2(equipo2);
 				partido.setCancha(cancha);
@@ -91,7 +91,7 @@ public class DataPartido {
 					arbitro.setDni(rs.getString("arb.dniArbitro"));
 					arbitro.setNombre(rs.getString("arb.nombre"));
 					arbitro.setApellido(rs.getString("arb.apellido"));
-					arbitro.setFecha_nacimiento(rs.getObject("arb.fechaNac",LocalDate.class));
+					arbitro.setFechaNacimiento(rs.getObject("arb.fechaNac",LocalDate.class));
 					partido.setEquipo1(equipo1);
 					partido.setEquipo2(equipo2);
 					partido.setCancha(cancha);		

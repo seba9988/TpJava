@@ -1,7 +1,4 @@
-<%@ page 
-	import="java.util.LinkedList"
-	import="entities.Cancha"
-	import="java.util.Iterator"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,9 +9,6 @@
     integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="css/main.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
-  <%
-  LinkedList<Cancha>list= (LinkedList<Cancha>)request.getAttribute("listaCancha");	
-  %>
 </head>
 <body>
   <nav><%@ include file="/Include/Head.html" %></nav>
@@ -33,24 +27,22 @@
           </tr>
         </thead>
         <tbody>
-          <%
-          for(Cancha listC : list) {			
-          %>
+          <c:forEach items="${listCanchas}" var="cancha">
           <tr>
-            <th><%=listC.getNroCancha()%></th>
-            <th><%=listC.getNombre()%></th>
+            <th><c:out value="${cancha.nroCancha}" /></th>
+            <th><c:out value="${cancha.nombre}" /></th>
             <th>
               <form action="CanchaServlet" method=get style="display: inline-block;">
-                <input type="hidden" name="numC" class="form-control" value="<%=listC.getNroCancha()%>">	
+                <input type="hidden" name="numC" class="form-control" value="${cancha.nroCancha}">	
                 <button type="submit" class="btn btn-outline-primary" name="accion" value="formEdit"><i class="bi bi-pencil-fill"></i></button>
               </form>
               <form action="CanchaServlet" method=post style="display: inline-block;">
-                <input type="hidden" name="numC" class="form-control" value="<%=listC.getNroCancha()%>">
+                <input type="hidden" name="numC" class="form-control" value="${cancha.nroCancha}">
                 <button type="submit" class="btn btn-outline-danger" name="accion" value="delete"><i class="bi bi-trash-fill"></i></button>
               </form>
             </th>
           </tr> 
-          <%}%>
+          </c:forEach>
         </tbody>
       </table>                  
     </article>

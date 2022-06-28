@@ -7,7 +7,7 @@ public class Persona {
 	protected String dni;
 	protected String nombre;
 	protected String apellido;
-	protected  LocalDate fechaNacimiento; 
+	protected LocalDate fechaNacimiento; 
 	
 	public String getDni() {
 		return dni;
@@ -27,10 +27,10 @@ public class Persona {
 	public void setApellido(String apellido) {
 		this.apellido = apellido;
 	}
-	public LocalDate getFecha_nacimiento() {
+	public LocalDate getFechaNacimiento() {
 		return fechaNacimiento;
 	}
-	public void setFecha_nacimiento(LocalDate fecha_nacimiento) {
-		this.fechaNacimiento = fecha_nacimiento;
+	public void setFechaNacimiento(LocalDate fechaNacimiento) {
+		this.fechaNacimiento = fechaNacimiento;
 	}
 }

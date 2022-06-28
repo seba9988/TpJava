@@ -8,13 +8,13 @@ public class DbConnector {
 	
 	private static DbConnector instancia;
 	
-	private   String driver = "com.mysql.cj.jdbc.Driver";
-	private   String host = "localhost";
-	private   String port = "3306";
-	private   String user= "java";
-	private   String password = "12345";
-	private   String db= "ligafut";
-	private   int conectados = 0;
+	private String driver = "com.mysql.cj.jdbc.Driver";
+	private String host = "localhost";
+	private String port = "3306";
+	private String user= "java";
+	private String password = "12345";
+	private String db= "ligafut";
+	private int conectados = 0;
 	private Connection conn=null;
 	private DbConnector() {
 		try {

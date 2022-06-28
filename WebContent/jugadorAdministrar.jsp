@@ -1,8 +1,4 @@
-<%@ page 
-	import="java.util.LinkedList"
-	import="entities.Jugador"
-	import="java.util.Iterator"%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -16,11 +12,7 @@
     integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="css/main.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
-  <%
-  LinkedList<Jugador>list= (LinkedList<Jugador>)request.getAttribute("listJugadores");
-  %>
 </head>
-
 <body>
   <nav><%@ include file="/Include/Head.html" %></nav>
   <section class="container">
@@ -48,32 +40,30 @@
         </thead>      
         <span style="color: red;"><%request.getAttribute("msg");%></span>
         <tbody>
-          <%
-          for(Jugador listJ : list) {		
-          %>
+          <c:forEach items="${listJugadores}" var="jugador">
           <tr>
-            <th><%=listJ.getDni()%></th>
-            <th><%=listJ.getNombre()%></th>
-            <th><%=listJ.getApellido()%></th>
-            <th><%=listJ.getFecha_nacimiento()%></th>
-            <th><%=listJ.getPosicion()%></th>
-            <th><%=listJ.getGoles()%></th>
-            <th><%=listJ.getAsistencias()%></th>
-            <th><%=listJ.getTarjetasA()%></th>
-            <th><%=listJ.getTarjetasR()%></th>
-            <th><%=listJ.getEquipo().getNombre()%></th>
+            <th><c:out value="${jugador.dni}" /></th>
+            <th><c:out value="${jugador.nombre}" /></th>
+            <th><c:out value="${jugador.apellido}" /></th>
+            <th><c:out value="${jugador.fechaNacimiento}" /></th>
+            <th><c:out value="${jugador.posicion}" /></th>
+            <th><c:out value="${jugador.goles}" /></th>
+            <th><c:out value="${jugador.asistencias}" /></th>
+            <th><c:out value="${jugador.tarjetasA}" /></th>
+            <th><c:out value="${jugador.tarjetasR}" /></th>
+            <th><c:out value="${jugador.equipo.nombre}" /></th>
             <th>
               <form action="JugadorServlet" method=get style="display: inline-block;">
-                <input type="hidden" name="dni" class="form-control" value="<%=listJ.getDni()%>">	
+                <input type="hidden" name="dni" class="form-control" value="${jugador.dni}">	
                 <button type="submit" class="btn btn-outline-primary" name="accion" value="formEdit"><i class="bi bi-pencil-fill"></i></button>
               </form>
               <form action="JugadorServlet" method=post style="display: inline-block;">
-                <input type="hidden" name="dni" class="form-control" value="<%=listJ.getDni()%>">
+                <input type="hidden" name="dni" class="form-control" value="${jugador.dni}">
                 <button type="submit" class="btn btn-outline-danger" name="accion" value="delete"><i class="bi bi-trash-fill"></i></button>
               </form>
             </th>
           </tr> 
-          <%}%>
+          </c:forEach>
         </tbody>
       </table>
     </article>

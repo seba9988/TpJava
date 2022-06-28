@@ -25,7 +25,7 @@ public class DataJugador {
 				jugador.setDni(rs.getString("jug.dniJugador"));
 				jugador.setNombre(rs.getString("jug.nombre"));
 				jugador.setApellido(rs.getString("jug.apellido"));
-				jugador.setFecha_nacimiento(rs.getObject("jug.fechaNac", LocalDate.class));
+				jugador.setFechaNacimiento(rs.getObject("jug.fechaNac", LocalDate.class));
 				jugador.setPosicion(rs.getString("jug.posicion"));
 				jugador.setGoles(rs.getInt("jug.goles"));
 				jugador.setAsistencias(rs.getInt("jug.asistencias"));
@@ -68,7 +68,7 @@ public class DataJugador {
 				jugador.setDni(rs.getString("jug.dniJugador"));
 				jugador.setNombre(rs.getString("jug.nombre"));
 				jugador.setApellido(rs.getString("jug.apellido"));
-				jugador.setFecha_nacimiento(rs.getObject("jug.fechaNac", LocalDate.class));
+				jugador.setFechaNacimiento(rs.getObject("jug.fechaNac", LocalDate.class));
 				jugador.setPosicion(rs.getString("jug.posicion"));
 				jugador.setGoles(rs.getInt("jug.goles"));
 				jugador.setAsistencias(rs.getInt("jug.asistencias"));
@@ -111,7 +111,7 @@ public class DataJugador {
 				jugador.setDni(rs.getString("jug.dniJugador"));
 				jugador.setNombre(rs.getString("jug.nombre"));
 				jugador.setApellido(rs.getString("jug.apellido"));
-				jugador.setFecha_nacimiento(rs.getObject("jug.fechaNac", LocalDate.class));
+				jugador.setFechaNacimiento(rs.getObject("jug.fechaNac", LocalDate.class));
 				jugador.setPosicion(rs.getString("jug.posicion"));
 				jugador.setGoles(rs.getInt("jug.goles"));
 				jugador.setAsistencias(rs.getInt("jug.asistencias"));
@@ -146,7 +146,7 @@ public class DataJugador {
 	    		ps.setString(1, j.getDni());
 	    		ps.setString(2, j.getNombre());
 				ps.setString(3,j.getApellido());
-				ps.setObject(4,j.getFecha_nacimiento());
+				ps.setObject(4,j.getFechaNacimiento());
 				ps.setString(5,j.getPosicion());
 				ps.setInt(6, j.getGoles());
 				ps.setInt(7,j.getAsistencias());
@@ -188,7 +188,7 @@ public class DataJugador {
 	    try (PreparedStatement ps=DbConnector.getInstancia().getConn().prepareStatement(updateStatement);){
 			ps.setString(1, j.getNombre());
 			ps.setString(2,j.getApellido());
-			ps.setObject(3,j.getFecha_nacimiento());
+			ps.setObject(3,j.getFechaNacimiento());
 			ps.setString(4,j.getPosicion());
 			ps.setInt(5, j.getGoles());
 			ps.setInt(6, j.getAsistencias());

@@ -12,9 +12,9 @@ public class Partido {
             private Equipo equipo2;
             private Arbitro arbitro;
             private Cancha cancha;
+            
             public LocalDate getFecha() {
                 return fecha;
-                
             }
             public void setFecha(LocalDate fecha) {
                 this.fecha = fecha;

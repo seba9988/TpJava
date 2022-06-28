@@ -19,7 +19,7 @@
     <br>
     <div class="container border text-center">
       <p class="h1">Reprogramacion Partido</p>  
-      <p> <%Partido partido=(Partido) request.getSession().getAttribute("PartidoNuevo");System.out.println("dentro del jsp");System.out.println(partido);%></p>
+      <p> <%Partido partido=(Partido) request.getSession().getAttribute("PartidoNuevo");%></p>
       <form action="PartidoServlet" method=post>
       	<div class="row mt-3">
           <label for="fecha" class="col-form-label col-sm-2">Fecha Partido: </label>

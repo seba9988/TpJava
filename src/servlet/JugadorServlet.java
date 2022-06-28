@@ -152,7 +152,7 @@ public class JugadorServlet extends HttpServlet {
 		jugador.setDni(request.getParameter("dni"));
 		jugador.setNombre(request.getParameter("nombre"));
 		jugador.setApellido(request.getParameter("apellido"));
-		jugador.setFecha_nacimiento(LocalDate.parse(request.getParameter("fechaNac")));
+		jugador.setFechaNacimiento(LocalDate.parse(request.getParameter("fechaNac")));
 		jugador.setPosicion(request.getParameter("posicion"));
 		jugador.setGoles(Integer.parseInt(request.getParameter("goles")));
 		jugador.setAsistencias(Integer.parseInt(request.getParameter("asistencias")));
@@ -169,7 +169,7 @@ public class JugadorServlet extends HttpServlet {
 		jugador.setDni(request.getParameter("dni"));
 		jugador.setNombre(request.getParameter("nombre"));
 		jugador.setApellido(request.getParameter("apellido"));
-		jugador.setFecha_nacimiento(LocalDate.parse(request.getParameter("fechaNac")));
+		jugador.setFechaNacimiento(LocalDate.parse(request.getParameter("fechaNac")));
 		jugador.setPosicion(request.getParameter("posicion"));
 		jugador.setGoles(Integer.parseInt(request.getParameter("goles")));
 		jugador.setAsistencias(Integer.parseInt(request.getParameter("asistencias")));

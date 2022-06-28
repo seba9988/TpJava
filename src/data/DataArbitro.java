@@ -23,7 +23,7 @@ public class DataArbitro {
 				a.setDni(rs.getString("dniArbitro"));
 				a.setNombre(rs.getString("nombre"));
 				a.setApellido(rs.getString("apellido"));
-				a.setFecha_nacimiento(rs.getObject("fechaNac",LocalDate.class));		
+				a.setFechaNacimiento(rs.getObject("fechaNac",LocalDate.class));		
 				arbitros.add(a);
 			}	
 		} catch (SQLException e) {
@@ -47,7 +47,7 @@ public class DataArbitro {
 		        	arbitro.setDni(rs.getString("arb.dniArbitro"));
 		        	arbitro.setNombre(rs.getString("arb.nombre"));
 		        	arbitro.setApellido(rs.getString("arb.apellido"));
-		        	arbitro.setFecha_nacimiento(rs.getObject("arb.fechaNac",LocalDate.class));
+		        	arbitro.setFechaNacimiento(rs.getObject("arb.fechaNac",LocalDate.class));
 		        }	
 			}		         		      
 	    } catch (SQLException ex) {
@@ -68,7 +68,7 @@ public class DataArbitro {
 	    		ps.setString(1, a.getDni());
 	    		ps.setString(2, a.getNombre());
 				ps.setString(3,a.getApellido());
-				ps.setObject(4,a.getFecha_nacimiento());    
+				ps.setObject(4,a.getFechaNacimiento());    
 	            ps.executeUpdate();      
 	        } catch (SQLException ex) {
 	        	ex.printStackTrace();
@@ -96,7 +96,7 @@ public class DataArbitro {
 	    try(PreparedStatement ps=DbConnector.getInstancia().getConn().prepareStatement(updateStatement)) {
 			ps.setString(1, a.getNombre());
 			ps.setString(2,a.getApellido());
-			ps.setObject(3,a.getFecha_nacimiento());
+			ps.setObject(3,a.getFechaNacimiento());
 			ps.setString(4,a.getDni());
 	        ps.executeUpdate();          
 	    } catch (SQLException ex) {
@@ -127,7 +127,7 @@ public class DataArbitro {
 		        	arbitro.setDni(rs.getString("arb.dniArbitro"));
 		        	arbitro.setNombre(rs.getString("arb.nombre"));
 		        	arbitro.setApellido(rs.getString("arb.apellido"));
-		        	arbitro.setFecha_nacimiento(rs.getObject("arb.fechaNac",LocalDate.class));
+		        	arbitro.setFechaNacimiento(rs.getObject("arb.fechaNac",LocalDate.class));
 		        	arbitrosDisp.add(arbitro);
 		        }	
 			}		         		      

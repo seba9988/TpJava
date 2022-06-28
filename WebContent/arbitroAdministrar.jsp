@@ -1,8 +1,4 @@
-<%@ page 
-	import="java.util.LinkedList"
-	import="entities.Arbitro"
-	import="java.util.Iterator"%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -16,9 +12,6 @@
     integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="css/main.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
-  <%
-  LinkedList<Arbitro>list= (LinkedList<Arbitro>)request.getAttribute("listArbitros");
-  %>
 </head>
 
 <body>  
@@ -40,26 +33,24 @@
           </tr>
         </thead>    
         <tbody> 
-          <%
-          for(Arbitro listA : list) {	
-          %>
+          <c:forEach items="${listArbitros}" var="arbitro">
           <tr>
-            <th><%=listA.getDni()%></th>
-            <th><%=listA.getNombre()%></th>
-            <th><%=listA.getApellido()%></th>
-            <th><%=listA.getFecha_nacimiento()%></th>
+            <th><c:out value="${arbitro.dni}" /></th>
+            <th><c:out value="${arbitro.nombre}" /></th>
+            <th><c:out value="${arbitro.apellido}" /></th>
+            <th><c:out value="${arbitro.fechaNacimiento}" /></th>
             <th>
               <form action="ArbitroServlet" method=get style="display: inline-block;">
-                <input type="hidden" name="dni" class="form-control" value="<%=listA.getDni()%>">	
+                <input type="hidden" name="dni" class="form-control" value="${arbitro.dni}">	
                 <button type="submit" class="btn btn-outline-primary" name="accion" value="formEdit"><i class="bi bi-pencil-fill"></i></button>
               </form>
               <form action="ArbitroServlet" method=post style="display: inline-block;"> 
-                <input type="hidden" name="dni" class="form-control" value="<%=listA.getDni()%>">
+                <input type="hidden" name="dni" class="form-control" value="${arbitro.dni}">
                 <button type="submit" class="btn btn-outline-danger" name="accion" value="delete"><i class="bi bi-trash-fill"></i></button>
               </form>
             </th>
           </tr> 
-          <%}%>
+          </c:forEach>
         </tbody>       
       </table>
     </article>

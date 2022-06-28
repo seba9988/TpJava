@@ -25,7 +25,7 @@ public class DataEntrenador {
 					entrenador.setDni(rs.getString("ent.dniEntrenador"));
 					entrenador.setNombre(rs.getString("ent.nombre"));
 					entrenador.setApellido(rs.getString("ent.apellido"));
-					entrenador.setFecha_nacimiento(rs.getObject("ent.fechaNac",LocalDate.class));
+					entrenador.setFechaNacimiento(rs.getObject("ent.fechaNac",LocalDate.class));
 					equipo.setIdEquipo(rs.getInt("eq.id"));
 					equipo.setNombre(rs.getString("eq.razonSocial"));
 					equipo.setLocalidad(rs.getString("eq.localidad"));
@@ -58,7 +58,7 @@ public class DataEntrenador {
 					entrenador.setDni(rs.getString("ent.dniEntrenador"));
 					entrenador.setNombre(rs.getString("ent.nombre"));
 					entrenador.setApellido(rs.getString("ent.apellido"));
-					entrenador.setFecha_nacimiento(rs.getObject("ent.fechaNac",LocalDate.class));
+					entrenador.setFechaNacimiento(rs.getObject("ent.fechaNac",LocalDate.class));
 					equipo.setIdEquipo(rs.getInt("eq.id"));
 					equipo.setNombre(rs.getString("eq.razonSocial"));
 					equipo.setLocalidad(rs.getString("eq.localidad"));
@@ -85,7 +85,7 @@ public class DataEntrenador {
 		    		ps.setString(1, e.getDni());
 		    		ps.setString(2, e.getNombre());
 					ps.setString(3,e.getApellido());
-					ps.setObject(4,e.getFecha_nacimiento());
+					ps.setObject(4,e.getFechaNacimiento());
 		            ps.executeUpdate();	            
 		        } catch (SQLException ex) {
 		        	ex.printStackTrace();
@@ -120,7 +120,7 @@ public class DataEntrenador {
 		    try(PreparedStatement ps=DbConnector.getInstancia().getConn().prepareStatement(updateStatement);) {
 				ps.setString(1, e.getNombre());
 				ps.setString(2,e.getApellido());
-				ps.setObject(3,e.getFecha_nacimiento());
+				ps.setObject(3,e.getFechaNacimiento());
 				if(e.getEquipo()!=null)
 					{idEquipo= e.getEquipo().getIdEquipo();}
 				ps.setObject(4,idEquipo);
@@ -151,7 +151,7 @@ public class DataEntrenador {
 				entrenador.setDni(rs.getString("ent.dniEntrenador"));
 				entrenador.setNombre(rs.getString("ent.nombre"));
 				entrenador.setApellido(rs.getString("ent.apellido"));
-				entrenador.setFecha_nacimiento(rs.getObject("ent.fechaNac",LocalDate.class));
+				entrenador.setFechaNacimiento(rs.getObject("ent.fechaNac",LocalDate.class));
 				entrenadores.add(entrenador);	
 				}		
 			} 	catch (SQLException e) {
@@ -173,7 +173,7 @@ public class DataEntrenador {
 					entrenador.setDni(rs.getString("ent.dniEntrenador"));
 					entrenador.setNombre(rs.getString("ent.nombre"));
 					entrenador.setApellido(rs.getString("ent.apellido"));
-					entrenador.setFecha_nacimiento(rs.getObject("ent.fechaNac",LocalDate.class));
+					entrenador.setFechaNacimiento(rs.getObject("ent.fechaNac",LocalDate.class));
 				}
 			}	catch (SQLException e) {
 				e.printStackTrace();
