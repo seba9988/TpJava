@@ -13,9 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import entities.Arbitro;
 import logic.ArbitroLogic;
-/**
- * Servlet implementation class ArbitroControl
- */
+
 @WebServlet("/ArbitroServlet")
 public class ArbitroServlet extends HttpServlet {	
 	String showFormAdd="arbitroFormAdd.jsp";

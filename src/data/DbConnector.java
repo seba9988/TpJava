@@ -16,6 +16,7 @@ public class DbConnector {
 	private String db= "ligafut";
 	private int conectados = 0;
 	private Connection conn=null;
+	
 	private DbConnector() {
 		try {
 			Class.forName(driver);

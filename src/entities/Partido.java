@@ -40,7 +40,7 @@ public class Partido {
             @Override
             public String toString() {
                 return "Partido [fecha=" + fecha + ", hora=" + hora + ", resultado=" + resultado + ", incidencias="
-                        + incidencias +", equipo 1"+this.equipo1.getNombre()+", equipo 2"+this.equipo2.getNombre()+ "]";
+                        + incidencias +", equipo 1 "+this.equipo1.getIdEquipo()+", equipo 2 "+this.equipo2.getIdEquipo()+", Nro Cancha: "+this.cancha.getNroCancha()+ "]";
             }
             
             public Equipo getEquipo1() {
@@ -68,17 +68,6 @@ public class Partido {
 				this.cancha = cancha;
 			}
 			public Partido(LocalDate fecha, LocalTime hora, String resultado, String incidencias, Equipo equipo1, Equipo equipo2, Arbitro arbitro, Cancha cancha)
-            {
-                this.setArbitro(arbitro);
-                this.setFecha(fecha);
-                this.setHora(hora);
-                this.setEquipo1(equipo1);
-                this.setEquipo2(equipo2);
-                this.setIncidencias(incidencias);
-                this.setResultado(resultado);
-                this.setCancha(cancha);
-            }
-            public Partido(LocalDate fecha, LocalTime hora, String resultado, String incidencias, int idEquipo1, int idEquipo2, int numCancha)
             {
                 this.setArbitro(arbitro);
                 this.setFecha(fecha);

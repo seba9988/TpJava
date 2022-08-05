@@ -163,7 +163,7 @@ public class DataEquipo {
 		}
 		}
 	}
-	public LinkedList<Equipo> getEquiposDisp(Partido partido){	//busca equipos que no participen en una fecha/hora dada tengan entrenador y 5 jugadores
+	public LinkedList<Equipo> getEquiposDispPartido(Partido partido){	//busca equipos que no participen en una fecha/hora dada, tengan entrenador y 5 jugadores
 		String getEquiDispStatement="select eq.id, eq.razonSocial, eq.localidad,eq.puntaje, eq.difGoles from equipo eq"
 				+ " inner join jugador jug on eq.id=jug.idEquipo"
 				+ " inner join entrenador ent on eq.id=ent.idEquipo"

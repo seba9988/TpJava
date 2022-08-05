@@ -42,9 +42,9 @@ public class EquipoLogic {
 	{
 		dEquipo.update(e);
 	}
-	public LinkedList<Equipo>  getEquiposDisp(Partido p)
+	public LinkedList<Equipo>  getEquiposDispPartido(Partido p)
 	{
-		return dEquipo.getEquiposDisp(p);
+		return dEquipo.getEquiposDispPartido(p);
 	}
 	public boolean dispParaReprogramar(Partido partido) 
 	{

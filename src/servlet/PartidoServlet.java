@@ -172,7 +172,7 @@ public class PartidoServlet extends HttpServlet {
 		partido.setCancha(cancha);
 		PartidoLogic partidoL= new PartidoLogic();
 		partido=partidoL.getOne(partido);		
-		LinkedList<Equipo>equiposDisp=equipoL.getEquiposDisp(partido); //lista de equipos que no juegen partidos en la fecha/hora ingresada, que tengan almenos 5 jugadores y un entrenador
+		LinkedList<Equipo>equiposDisp=equipoL.getEquiposDispPartido(partido); //lista de equipos que no juegen partidos en la fecha/hora ingresada, que tengan almenos 5 jugadores y un entrenador
 		LinkedList<Arbitro>arbitrosDisp=arbitroL.getArbitrosDisp(partido);// lista de arbitros  que no estan ocupadoes en la fecha/hora ingresada	
 		equiposDisp.add(partido.getEquipo1());// agrego equipo que ya estaba antes en el partido
 		equiposDisp.add(partido.getEquipo2());// agrego equipo que ya estaba antes en el partido
@@ -210,7 +210,7 @@ public class PartidoServlet extends HttpServlet {
 		Partido partido=(Partido)request.getSession().getAttribute("partido");
 		partido.setFecha(LocalDate.parse(request.getParameter("Fecha")));
 		partido.setHora(LocalTime.parse(request.getParameter("Hora")));
-		LinkedList<Equipo>equiposDisp=equipoL.getEquiposDisp(partido); //lista de equipos que no juegen partidos en la fecha/hora ingresada, que tengan almenos 5 jugadores y un entrenador
+		LinkedList<Equipo>equiposDisp=equipoL.getEquiposDispPartido(partido); //lista de equipos que no juegen partidos en la fecha/hora ingresada, que tengan almenos 5 jugadores y un entrenador
 		LinkedList<Cancha>canchasDisp=canchaL.getCanchasDisp(partido); //lista de canchas que no esten ocupadas en la fecha/hora ingresada
 		LinkedList<Arbitro>arbitrosDisp=arbitroL.getArbitrosDisp(partido);// lista de arbitros  que no estan ocupadoes en la fecha/hora ingresada
 		request.getSession().setAttribute("partido", partido); //fecha y hora del nuevo partido a agregar
