@@ -12,9 +12,15 @@ import entities.*;
 
 public class FixtureLogic {
 
-	// crea el fixture, de parametros recibe los equipos que participan en el fixture y la fecha desde la cual deben jugarse partidos, esta fecha debe ser lunes,
+	//crea el fixture, de parametros recibe los equipos que participan en el fixture y la fecha desde la cual deben jugarse partidos, esta fecha debe ser lunes,
 	//si la fecha no es lunes automaticamente se cambiara al proximo lunes
-	// funciona con hasta 100 equipos, si hay  mas de 100 equipos van a comenzar a haber partidos mezclados con semanas que no les corresponde
+	//funciona con hasta 100 equipos, si hay  mas de 100 equipos van a comenzar a haber partidos mezclados con semanas que no les corresponde
+	
+	//se crea el fixture usando el metodo round robin
+	//se auto genera fecha de lunes a viernes con horario de 13:00 a 21:00 y nro de cancha aleatoria
+	//si la cantidad de equipos es menor a 50 se juega un partido cada 2 horas con un total de 5 partidos por dia
+	//si la cantidad de equipos es mayor a 50 se jugan dos partidos cada 2 horas con un total de 10 partidos por dia
+	//se verifica que no se repita la cancha cuando se juega doble partido por hora 
 	public LinkedList <Partido> createFixture(LinkedList<Equipo> equipos, LocalDate fechaInicio){ 
 			
 		if(equipos.size()% 2 != 0)
