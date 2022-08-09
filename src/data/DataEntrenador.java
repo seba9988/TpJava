@@ -165,15 +165,20 @@ public class DataEntrenador {
 		}
 		public Entrenador getEntrenadorDeUnEquipo(Equipo equipo) throws SQLException {
 			String getEntrenadorDeUnEquipoStmt="select ent.dniEntrenador, ent.nombre,ent.apellido,ent.fechaNac"
-					+ " from entrenador ent inner join equipo eq on eq.idEquipo=ent.idEquipo";
+					+ " from entrenador ent"
+					+ " inner join equipo eq"
+					+ " on eq.id=ent.idEquipo"
+					+ " WHERE eq.id=?"; 
 			Entrenador entrenador=new Entrenador();
 			try(PreparedStatement ps=DbConnector.getInstancia().getConn().prepareStatement(getEntrenadorDeUnEquipoStmt);){
 				ps.setInt(1, equipo.getIdEquipo());
 				try(ResultSet rs=ps.executeQuery();){
-					entrenador.setDni(rs.getString("ent.dniEntrenador"));
-					entrenador.setNombre(rs.getString("ent.nombre"));
-					entrenador.setApellido(rs.getString("ent.apellido"));
-					entrenador.setFechaNacimiento(rs.getObject("ent.fechaNac",LocalDate.class));
+					while(rs.next()) {
+						entrenador.setDni(rs.getString("ent.dniEntrenador"));
+						entrenador.setNombre(rs.getString("ent.nombre"));
+						entrenador.setApellido(rs.getString("ent.apellido"));
+						entrenador.setFechaNacimiento(rs.getObject("ent.fechaNac",LocalDate.class));
+					}			
 				}
 			}	catch (SQLException e) {
 				e.printStackTrace();
